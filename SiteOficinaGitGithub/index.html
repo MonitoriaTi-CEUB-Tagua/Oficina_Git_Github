@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="Um guia prático de versionamento e colaboração, com identidade visual inspirada no CEUB.">
+    <meta name="theme-color" content="#3d144c">
+    <title>Git &amp; GitHub · Guia Git &amp; GitHub</title>
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <div class="read-progress" aria-hidden="true"></div>
+    <header class="topbar">
+        <a href="index.html" class="brand" aria-label="Guia Git e GitHub, início"><img src="assets/img/ceub.png"
+                width="58" height="58" alt="CEUB"><span>Git &amp; GitHub<small>Guia de estudo</small></span></a><button
+            type="button" class="monitors-toggle" aria-controls="monitors-dialog">Monitores</button>
+        <nav class="toplinks" aria-label="Acesso rápido"><a href="primeiros-passos.html#downloads">Downloads ↗</a><a
+                href="referencia.html">Consulta rápida</a><button type="button" class="menu-toggle"
+                aria-expanded="false" aria-controls="navegacao">Menu</button></nav>
+        <dialog class="monitors-dialog" id="monitors-dialog">
+            <div class="monitors-panel">
+                <div class="monitors-heading">
+                    <h2>Monitores responsáveis</h2><button type="button" class="monitors-close"
+                        aria-label="Fechar">×</button>
+                </div>
+                <ul class="monitors-list">
+                    <li><a href="https://github.com/Gustavo-Gomide" target="_blank" rel="noopener noreferrer">Gustavo
+                            Gomide ↗</a></li>
+                    <li><a href="https://github.com/VictorRMRibeiro" target="_blank" rel="noopener noreferrer">Victor
+                            Ribeiro ↗</a></li>
+                </ul>
+            </div>
+        </dialog>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao">
+            <p class="eyebrow">Explore o guia</p>
+            <nav aria-label="Capítulos">
+                <ol class="nav-list">
+                    <li><a href="index.html" aria-current="page"><span>00</span>Git &amp; GitHub</a></li>
+                    <li><a href="primeiros-passos.html"><span>01</span>Instalação e primeiros passos</a></li>
+                    <li><a href="repositorios.html"><span>02</span>Repositórios, clone e fork</a></li>
+                    <li><a href="commits.html"><span>03</span>Commits e sincronização</a></li>
+                    <li><a href="branches.html"><span>04</span>Branches: trabalho em paralelo</a></li>
+                    <li><a href="merge.html"><span>05</span>Merge, pull requests e conflitos</a></li>
+                    <li><a href="desktop.html"><span>06</span>GitHub Desktop</a></li>
+                    <li><a href="markdown.html"><span>07</span>Markdown: documentação que se lê</a></li>
+                    <li><a href="github.html"><span>08</span>GitHub: organize e publique</a></li>
+                    <li><a href="referencia.html"><span>09</span>Consulta rápida e prática</a></li>
+                </ol>
+            </nav>
+            <p class="sidebar-note">Aprenda no seu ritmo.<br>Teste em um repositório de prática antes de alterar
+                projetos da equipe.</p>
+        </aside>
+        <main class="main" id="conteudo">
+            <div class="breadcrumbs"><a href="index.html">Guia</a><span aria-hidden="true">/</span><span>Git &amp;
+                    GitHub</span></div>
+
+
+            <section class="hero" aria-labelledby="hero-title">
+                <div>
+                    <div class="eyebrow">Tecnologia · Guia de estudo</div>
+                    <h1 id="hero-title">Seu código.<br>Com história.<br>Em equipe.</h1>
+                    <p>Aprenda Git e GitHub, do primeiro commit ao trabalho com branches, revisão e merge.</p><a
+                        class="button" href="primeiros-passos.html">Começar o guia <span aria-hidden="true">→</span></a>
+                </div>
+                <div class="hero-art"><svg viewBox="0 0 340 265" role="img" aria-labelledby="hero-svg-title">
+                        <title id="hero-svg-title">Uma branch separa o trabalho e depois volta à principal em um merge.
+                        </title>
+                        <g fill="none" stroke-width="3">
+                            <path d="M40 190H300" stroke="#ae92b9" />
+                            <path d="M90 190C135 190 100 85 155 85H215C265 85 240 190 285 190" stroke="#f64cb0" />
+                        </g>
+                        <g fill="#3d144c" stroke="#e6d9ed" stroke-width="3">
+                            <circle cx="40" cy="190" r="8" />
+                            <circle cx="90" cy="190" r="8" />
+                            <circle cx="190" cy="190" r="8" />
+                            <circle cx="285" cy="190" r="10" />
+                        </g>
+                        <g fill="#e51391">
+                            <circle cx="155" cy="85" r="9" />
+                            <circle cx="215" cy="85" r="9" />
+                        </g>
+                        <g font-family="monospace" font-size="12" fill="#e6d9ed"><text x="32" y="226">main</text><text
+                                x="133" y="53" fill="#ff95d4">feature/ideia</text><text x="242" y="226">merge</text></g>
+                        <rect x="91" y="120" width="146" height="33" rx="6" fill="#542562" /><text x="104" y="141"
+                            font-family="monospace" font-size="11" fill="#fff">git commit -m "..."</text>
+                    </svg></div>
+            </section>
+            <section class="section" aria-labelledby="entenda">
+                <h2 id="entenda">Antes de abrir o terminal</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Ferramenta</th>
+                                <th scope="col">O que faz</th>
+                                <th scope="col">Onde funciona</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Git</strong></td>
+                                <td>Registra versões, compara alterações e une linhas de trabalho.</td>
+                                <td>No seu computador; commits não exigem internet.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>GitHub</strong></td>
+                                <td>Hospeda repositórios Git e organiza colaboração, revisões e tarefas.</td>
+                                <td>Na web e por integrações.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>GitHub Desktop</strong></td>
+                                <td>Oferece uma interface gráfica para operações do Git.</td>
+                                <td>Aplicativo no computador.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="section" aria-labelledby="trilha">
+                <h2 id="trilha">Uma trilha, do básico à colaboração</h2>
+                <p>Leia em sequência ou abra diretamente o assunto de que precisa.</p>
+                <div class="grid" id="chapter-list"><a class="card chapter-card" href="primeiros-passos.html"><span
+                            class="num">01 / CAPÍTULO</span><span class="arrow" aria-hidden="true">↗</span>
+                        <h3>Instalação e primeiros passos</h3>
+                        <p>Prepare o ambiente e entenda o que está sendo salvo antes de enviar qualquer arquivo.</p>
+                    </a><a class="card chapter-card" href="repositorios.html"><span class="num">02 /
+                            CAPÍTULO</span><span class="arrow" aria-hidden="true">↗</span>
+                        <h3>Repositórios, clone e fork</h3>
+                        <p>Escolha entre começar um projeto, baixar uma cópia de trabalho ou contribuir em um projeto de
+                            outra pessoa.</p>
+                    </a><a class="card chapter-card" href="commits.html"><span class="num">03 / CAPÍTULO</span><span
+                            class="arrow" aria-hidden="true">↗</span>
+                        <h3>Commits e sincronização</h3>
+                        <p>Registre mudanças com intenção, confira o que está enviando e mantenha o trabalho atualizado.
+                        </p>
+                    </a><a class="card chapter-card" href="branches.html"><span class="num">04 / CAPÍTULO</span><span
+                            class="arrow" aria-hidden="true">↗</span>
+                        <h3>Branches: trabalho em paralelo</h3>
+                        <p>A branch dá um nome a uma linha de desenvolvimento. Você pode experimentar sem alterar
+                            imediatamente a versão principal.</p>
+                    </a><a class="card chapter-card" href="merge.html"><span class="num">05 / CAPÍTULO</span><span
+                            class="arrow" aria-hidden="true">↗</span>
+                        <h3>Merge, pull requests e conflitos</h3>
+                        <p>Una mudanças com revisão. Entenda o destino do merge e resolva conflitos preservando o
+                            comportamento esperado.</p>
+                    </a><a class="card chapter-card" href="desktop.html"><span class="num">06 / CAPÍTULO</span><span
+                            class="arrow" aria-hidden="true">↗</span>
+                        <h3>GitHub Desktop</h3>
+                        <p>Faça o mesmo fluxo de versionamento usando uma interface visual. Os conceitos de branch,
+                            commit e merge continuam iguais.</p>
+                    </a><a class="card chapter-card" href="markdown.html"><span class="num">07 / CAPÍTULO</span><span
+                            class="arrow" aria-hidden="true">↗</span>
+                        <h3>Markdown: documentação que se lê</h3>
+                        <p>Arquivos .md usam texto simples com marcações. No GitHub, eles viram documentação formatada,
+                            descrições de issues e pull requests.</p>
+                    </a><a class="card chapter-card" href="github.html"><span class="num">08 / CAPÍTULO</span><span
+                            class="arrow" aria-hidden="true">↗</span>
+                        <h3>GitHub: organize e publique</h3>
+                        <p>Use o repositório como ponto de encontro do projeto: código, tarefas, revisão, documentação e
+                            publicação.</p>
+                    </a><a class="card chapter-card" href="referencia.html"><span class="num">09 / CAPÍTULO</span><span
+                            class="arrow" aria-hidden="true">↗</span>
+                        <h3>Consulta rápida e prática</h3>
+                        <p>Encontre um comando, entenda mensagens frequentes e conclua um exercício completo de
+                            colaboração.</p>
+                    </a></div>
+            </section>
+            <section class="section" aria-labelledby="fluxo">
+                <h2 id="fluxo">O fluxo que você vai praticar</h2>
+                <ol class="steps">
+                    <li><strong>Prepare:</strong> instale o Git, configure a autoria e clone ou crie um repositório.
+                    </li>
+                    <li><strong>Trabalhe:</strong> crie uma branch, edite arquivos e registre commits pequenos.</li>
+                    <li><strong>Compartilhe:</strong> envie a branch, abra um pull request e receba revisão.</li>
+                    <li><strong>Integre:</strong> resolva conflitos, faça o merge e atualize sua cópia local.</li>
+                </ol>
+            </section>
+            <aside class="note"><strong>Como usar os exemplos:</strong> substitua <code>SEU-USUARIO</code>,
+                <code>SEU-EMAIL</code> e nomes de repositórios. Execute os comandos dentro da pasta correta. Os blocos
+                não incluem o símbolo <code>$</code>, para facilitar a cópia.</aside>
+            <aside class="sources" aria-label="Referências oficiais"><strong>Continue na documentação oficial</strong>
+                <p><a href="https://git-scm.com/book/pt-br/v2" target="_blank" rel="noopener noreferrer">Livro Pro Git
+                        ↗</a><a href="https://docs.github.com/pt/get-started" target="_blank"
+                        rel="noopener noreferrer">GitHub Docs ↗</a></p>
+            </aside>
+            <nav class="page-nav" aria-label="Capítulo anterior e próximo"><a class="next"
+                    href="primeiros-passos.html"><small>Próximo</small>Instalação e primeiros passos →</a></nav>
+            <footer class="footer"><span>Material de apoio · Identidade visual inspirada no CEUB.<br>Guia independente,
+                    sem caráter de documentação institucional oficial.</span><a href="#conteudo">Voltar ao início ↑</a>
+            </footer>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="Escolha entre começar um projeto, baixar uma cópia de trabalho ou contribuir em um projeto de outra pessoa.">
+    <meta name="theme-color" content="#3d144c">
+    <title>Repositórios, clone e fork · Guia Git &amp; GitHub</title>
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <div class="read-progress" aria-hidden="true"></div>
+    <header class="topbar">
+        <a href="index.html" class="brand" aria-label="Guia Git e GitHub, início"><img src="assets/img/ceub.png"
+                width="58" height="58" alt="CEUB"><span>Git &amp; GitHub<small>Guia de estudo</small></span></a><button
+            type="button" class="monitors-toggle" aria-controls="monitors-dialog">Monitores</button>
+        <nav class="toplinks" aria-label="Acesso rápido"><a href="primeiros-passos.html#downloads">Downloads ↗</a><a
+                href="referencia.html">Consulta rápida</a><button type="button" class="menu-toggle"
+                aria-expanded="false" aria-controls="navegacao">Menu</button></nav>
+        <dialog class="monitors-dialog" id="monitors-dialog">
+            <div class="monitors-panel">
+                <div class="monitors-heading">
+                    <h2>Monitores responsáveis</h2><button type="button" class="monitors-close"
+                        aria-label="Fechar">×</button>
+                </div>
+                <ul class="monitors-list">
+                    <li><a href="https://github.com/Gustavo-Gomide" target="_blank" rel="noopener noreferrer">Gustavo
+                            Gomide ↗</a></li>
+                    <li><a href="https://github.com/VictorRMRibeiro" target="_blank" rel="noopener noreferrer">Victor
+                            Ribeiro ↗</a></li>
+                </ul>
+            </div>
+        </dialog>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao">
+            <p class="eyebrow">Explore o guia</p>
+            <nav aria-label="Capítulos">
+                <ol class="nav-list">
+                    <li><a href="index.html"><span>00</span>Git &amp; GitHub</a></li>
+                    <li><a href="primeiros-passos.html"><span>01</span>Instalação e primeiros passos</a></li>
+                    <li><a href="repositorios.html" aria-current="page"><span>02</span>Repositórios, clone e fork</a>
+                    </li>
+                    <li><a href="commits.html"><span>03</span>Commits e sincronização</a></li>
+                    <li><a href="branches.html"><span>04</span>Branches: trabalho em paralelo</a></li>
+                    <li><a href="merge.html"><span>05</span>Merge, pull requests e conflitos</a></li>
+                    <li><a href="desktop.html"><span>06</span>GitHub Desktop</a></li>
+                    <li><a href="markdown.html"><span>07</span>Markdown: documentação que se lê</a></li>
+                    <li><a href="github.html"><span>08</span>GitHub: organize e publique</a></li>
+                    <li><a href="referencia.html"><span>09</span>Consulta rápida e prática</a></li>
+                </ol>
+            </nav>
+            <p class="sidebar-note">Aprenda no seu ritmo.<br>Teste em um repositório de prática antes de alterar
+                projetos da equipe.</p>
+        </aside>
+        <main class="main" id="conteudo">
+            <div class="breadcrumbs"><a href="index.html">Guia</a><span aria-hidden="true">/</span><span>Repositórios,
+                    clone e fork</span></div>
+            <header class="page-head"><span class="eyebrow">Capítulo 02 / 09</span>
+                <h1>Repositórios, clone e fork</h1>
+                <p class="lead">Escolha entre começar um projeto, baixar uma cópia de trabalho ou contribuir em um
+                    projeto de outra pessoa.</p>
+            </header>
+            <nav class="toc" aria-label="Nesta página"><a href="#diferencas">Clone, fork ou Download ZIP?</a><a
+                    href="#clonar">Clonar um projeto existente</a><a href="#novo">Criar um projeto do zero</a><a
+                    href="#fork">Contribuir usando fork</a><a href="#sincronizar">Manter o fork atualizado</a></nav>
+            <section class="section" aria-labelledby="diferencas">
+                <h2 id="diferencas">Clone, fork ou Download ZIP?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Operação</th>
+                                <th scope="col">Resultado</th>
+                                <th scope="col">Quando usar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>git clone</code></td>
+                                <td>Cópia local com histórico Git e remoto configurado.</td>
+                                <td>Desenvolver no computador. Não concede permissão para enviar ao original.</td>
+                            </tr>
+                            <tr>
+                                <td>Fork</td>
+                                <td>Repositório na sua conta do GitHub vinculado ao projeto original.</td>
+                                <td>Propor mudanças sem acesso de escrita ao original. Depois, clone seu fork.</td>
+                            </tr>
+                            <tr>
+                                <td>Download ZIP</td>
+                                <td>Arquivos de uma versão, sem a pasta <code>.git</code>.</td>
+                                <td>Apenas ler ou executar. Não substitui um clone para contribuir.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="section" aria-labelledby="clonar">
+                <h2 id="clonar">Clonar um projeto existente</h2>
+                <p>No repositório, abra <strong>Code → Local → HTTPS</strong> e copie a URL. No terminal, vá até a pasta
+                    onde quer guardar seus projetos.</p>
+                <div class="codebox">
+                    <div class="codebar"><span>terminal</span><button class="copy" type="button"
+                            aria-label="Copiar bloco de código">Copiar</button></div>
+                    <pre><code>git clone https://github.com/SEU-USUARIO/meu-projeto.git
+cd meu-projeto
+git status
+git remote -v</code></pre>
+                </div>
+                <p>O clone cria a pasta <code>meu-projeto</code>. O nome <code>origin</code> normalmente representa a
+                    URL de onde você clonou. Você não precisa rodar <code>git init</code> depois de clonar.</p>
+            </section>
+            <section class="section" aria-labelledby="novo">
+                <h2 id="novo">Criar um projeto do zero</h2>
+                <p>No GitHub, use <strong>New repository</strong>, escolha o nome e a visibilidade. Para acompanhar este
+                    exemplo, crie um repositório vazio, sem README, licença ou .gitignore.</p>
+                <div class="codebox">
+                    <div class="codebar"><span>terminal</span><button class="copy" type="button"
+                            aria-label="Copiar bloco de código">Copiar</button></div>
+                    <pre><code>mkdir meu-projeto
+cd meu-projeto
+git init -b main
+echo &quot;# Meu projeto&quot; &gt; README.md
+git add README.md
+git commit -m &quot;docs: cria README inicial&quot;
+git remote add origin https://github.com/SEU-USUARIO/meu-projeto.git
+git push -u origin main</code></pre>
+                </div>
+                <p><code>-u</code> associa sua branch local à remota para os próximos <code>push</code> e
+                    <code>pull</code>. Se o repositório no GitHub já tiver arquivos, prefira cloná-lo e adicionar seu
+                    trabalho nessa cópia.</p>
+            </section>
+            <section class="section" aria-labelledby="fork">
+                <h2 id="fork">Contribuir usando fork</h2>
+                <ol class="steps">
+                    <li>No projeto original, clique em <strong>Fork → Create fork</strong>.</li>
+                    <li>Clone o fork da <strong>sua conta</strong>.</li>
+                    <li>Adicione o original como <code>upstream</code>; esse nome é uma convenção, não uma palavra
+                        especial do Git.</li>
+                    <li>Crie uma branch, faça commits e envie para <code>origin</code>, seu fork.</li>
+                    <li>No GitHub, abra um pull request com destino ao repositório original.</li>
+                </ol>
+            </section>
+            <div class="codebox">
+                <div class="codebar"><span>terminal</span><button class="copy" type="button"
+                        aria-label="Copiar bloco de código">Copiar</button></div>
+                <pre><code>git clone https://github.com/SEU-USUARIO/projeto.git
+cd projeto
+git remote add upstream https://github.com/AUTOR-ORIGINAL/projeto.git
+git switch -c docs/melhora-guia
+# Edite e salve README.md antes dos próximos comandos
+git add README.md
+git commit -m &quot;docs: esclarece instalacao&quot;
+git push -u origin docs/melhora-guia</code></pre>
+            </div>
+            <section class="section" aria-labelledby="sincronizar">
+                <h2 id="sincronizar">Manter o fork atualizado</h2>
+                <p>Com sua <code>main</code> sem mudanças próprias e a área de trabalho limpa:</p>
+                <div class="codebox">
+                    <div class="codebar"><span>terminal</span><button class="copy" type="button"
+                            aria-label="Copiar bloco de código">Copiar</button></div>
+                    <pre><code>git switch main
+git fetch upstream
+git merge --ff-only upstream/main
+git push origin main</code></pre>
+                </div>
+                <p>Se <code>--ff-only</code> recusar, os históricos divergiram. Revise os commits antes de decidir como
+                    integrar; não force o envio. Confira também se o projeto original usa <code>main</code> ou outro
+                    nome de branch.</p>
+            </section>
+            <aside class="sources" aria-label="Referências oficiais"><strong>Continue na documentação oficial</strong>
+                <p><a href="https://docs.github.com/en/pull-requests/how-tos/work-with-forks/fork-a-repo"
+                        target="_blank" rel="noopener noreferrer">Criar um fork ↗</a><a
+                        href="https://git-scm.com/docs/git-clone" target="_blank" rel="noopener noreferrer">git clone
+                        ↗</a></p>
+            </aside>
+            <nav class="page-nav" aria-label="Capítulo anterior e próximo"><a
+                    href="primeiros-passos.html"><small>Anterior</small>← Instalação e primeiros passos</a><a
+                    class="next" href="commits.html"><small>Próximo</small>Commits e sincronização →</a></nav>
+            <footer class="footer"><span>Material de apoio · Identidade visual inspirada no CEUB.<br>Guia independente,
+                    sem caráter de documentação institucional oficial.</span><a href="#conteudo">Voltar ao início ↑</a>
+            </footer>
+        </main>
+    </div>
+</body>
+
+</html>
