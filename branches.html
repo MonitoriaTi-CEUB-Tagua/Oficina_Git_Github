@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Branches: linhas paralelas | Oficina Git & GitHub</title>
+    <meta name="description" content="Crie, troque e apague branches, entenda HEAD e detached HEAD, use stash e conheça GitHub Flow e Git Flow com grafos interativos.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip practice">Prática</span> Capítulo 4</p>
+                    <h1>Branches: linhas paralelas</h1>
+                    <p class="lead">Uma branch deixa você experimentar à vontade sem tocar na versão que funciona. É o recurso que torna o trabalho em equipe possível.</p>
+                </header>
+
+                <h2>Por que usar branches</h2>
+                <ul>
+                    <li><strong>A main sempre funciona.</strong> O que está pela metade fica na sua branch até ficar pronto.</li>
+                    <li><strong>Várias tarefas ao mesmo tempo.</strong> Uma branch para o login, outra para corrigir o rodapé. Você troca entre elas em um segundo.</li>
+                    <li><strong>Várias pessoas ao mesmo tempo.</strong> Cada pessoa trabalha na sua branch e as mudanças se juntam depois, com revisão.</li>
+                    <li><strong>Experimentar sem medo.</strong> Não deu certo? Apague a branch e pronto.</li>
+                </ul>
+                <div class="callout analogy">
+                    <p class="callout-title">Analogia</p>
+                    <p>É como salvar o jogo antes de uma fase difícil e testar outro caminho num slot separado. Se der certo, você continua dali; se não, volta ao save principal.</p>
+                </div>
+
+                <h2>Criando e trocando de branch</h2>
+                <p>Lembre do <a href="conceitos.html#branch-e-so-uma-etiqueta">capítulo de teoria</a>: a branch é uma etiqueta, e o <code>HEAD</code> diz em qual etiqueta você está. Acompanhe:</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git commit -m "layout"
+                        > Um projeto com dois commits. Você está na `main`.
+                        $ git switch -c feature/login
+                        > `switch -c` **cria** a branch e já **entra** nela. O `HEAD` foi para `feature/login`, mas ainda não há commit novo: as duas etiquetas apontam para `B`.
+                        $ git commit -m "formulário"
+                        > O commit `C` entra só na `feature/login`. A `main` não se mexe.
+                        $ git commit -m "validação"
+                        > Mais um commit na branch. A linha rosa é o trabalho do login.
+                        $ git switch main
+                        > De volta à `main`. Os arquivos da pasta voltam a ser os de `B`: o formulário "some" da pasta, mas está guardado na outra branch.
+                        $ git switch -c fix/rodape
+                        + git commit -m "rodapé"
+                        > Outra branch saindo da `main`, para uma correção rápida. Cada branch tem sua cor e não interfere na outra.
+                        $ git switch main
+                        + git branch
+                        > `git branch` lista as branches locais. O `*` marca a atual.
+                    </script>
+                    <figcaption>Duas tarefas independentes partindo da mesma versão da <code>main</code>.</figcaption>
+                </figure>
+
+                <h3>Comandos de branch</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Comando</th><th>O que faz</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>git branch</code></td><td>Lista as branches locais (<code>-a</code> inclui as do GitHub).</td></tr>
+                            <tr><td><code>git switch -c nome</code></td><td>Cria a branch a partir de onde você está e entra nela.</td></tr>
+                            <tr><td><code>git switch nome</code></td><td>Troca para uma branch que já existe.</td></tr>
+                            <tr><td><code>git switch -</code></td><td>Volta para a branch anterior (como o “voltar” do controle remoto).</td></tr>
+                            <tr><td><code>git branch -m novo-nome</code></td><td>Renomeia a branch atual.</td></tr>
+                            <tr><td><code>git branch -d nome</code></td><td>Apaga uma branch que já foi integrada. O Git recusa se houver commits que se perderiam.</td></tr>
+                            <tr><td><code>git branch -D nome</code></td><td>Apaga mesmo assim. Use só se tiver certeza.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout tip">
+                    <p class="callout-title">switch ou checkout?</p>
+                    <p>O <code>git checkout</code> é o comando antigo e faz muitas coisas (trocar de branch, restaurar arquivo, ir para um commit). Em 2019 o Git criou o <code>git switch</code> (trocar de branch) e o <code>git restore</code> (restaurar arquivos), mais fáceis de entender. Os dois funcionam; tutoriais antigos usam <code>git checkout -b nome</code>, que equivale a <code>git switch -c nome</code>.</p>
+                </div>
+
+                <h2>Trocar de branch com alterações pendentes</h2>
+                <p>Se você editou arquivos e tenta trocar de branch, duas coisas podem acontecer:</p>
+                <ul>
+                    <li>As alterações vão junto para a outra branch, quando não conflitam. Isso confunde: parece que você editou a branch errada.</li>
+                    <li>O Git recusa: <code>error: Your local changes to the following files would be overwritten by checkout</code>.</li>
+                </ul>
+                <p>Antes de trocar, faça um commit. Se o trabalho ainda não está bom para commit, guarde na <strong>stash</strong>, uma gaveta temporária:</p>
+                <pre data-label="terminal"># guarda as alterações e deixa a pasta limpa
+git stash -m "login pela metade"
+
+# agora pode trocar à vontade
+git switch fix/rodape
+# ... resolve o que precisava ...
+git switch feature/login
+
+# devolve as alterações guardadas
+git stash pop
+
+# ver o que tem na gaveta
+git stash list</pre>
+
+                <h2>Detached HEAD: quando o HEAD não está numa branch</h2>
+                <p>Você pode pedir para ver um commit antigo com <code>git checkout B</code> (ou <code>git switch --detach B</code>). O <code>HEAD</code> passa a apontar direto para o commit, e não para uma branch. É o tal <strong>detached HEAD</strong>.</p>
+                <p>Olhar é seguro. O risco aparece se você fizer commits nesse estado:</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git commit -m "versão 1"
+                        = git commit -m "versão 2"
+                        $ git checkout B
+                        > O `HEAD` aponta direto para `B`, sem branch. Os arquivos da pasta voltaram para a versão 1. Bom para investigar quando um bug apareceu.
+                        $ git commit -m "teste"
+                        > Você fez um commit. Ele existe, mas nenhuma branch aponta para ele: só o `HEAD` sabe onde ele está.
+                        $ git switch main
+                        > Ao voltar para a `main`, o commit `D` ficou sem nenhuma etiqueta (bolinha apagada). Ele não aparece mais no `git log`.
+                        $ git branch resgate D
+                        > Para salvá-lo, crie uma branch apontando para ele. O hash aparece na mensagem do Git ao sair; se perdeu, procure no `git reflog`.
+                    </script>
+                    <figcaption>Commits sem branch não somem na hora, mas o Git apaga depois de algumas semanas.</figcaption>
+                </figure>
+                <div class="callout tip">
+                    <p class="callout-title">Regra prática</p>
+                    <p>Se o <code>git status</code> disser <code>HEAD detached at …</code> e você quiser fazer mudanças, crie uma branch antes: <code>git switch -c nome</code>.</p>
+                </div>
+
+                <h2>Dando nome às branches</h2>
+                <p>Sem espaços nem acentos, curtos e descritivos. Prefixos ajudam a saber o objetivo de cada branch; combine o padrão com a equipe.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Nome</th><th>Uso</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>main</code></td><td>Versão principal, sempre funcionando. Antigamente se chamava <code>master</code>.</td></tr>
+                            <tr><td><code>feature/carrinho</code></td><td>Funcionalidade nova.</td></tr>
+                            <tr><td><code>fix/menu-celular</code></td><td>Correção de bug.</td></tr>
+                            <tr><td><code>docs/readme</code></td><td>Documentação.</td></tr>
+                            <tr><td><code>ana/teste-api</code></td><td>Experimento pessoal, com o nome de quem criou.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Estratégias de equipe</h2>
+                <p>Uma estratégia de branches é o combinado da equipe sobre quais branches existem e como o trabalho chega na <code>main</code>.</p>
+
+                <h3>GitHub Flow (recomendado para começar)</h3>
+                <p>Só existe uma branch permanente, a <code>main</code>. Cada tarefa vira uma branch curta, que volta para a <code>main</code> por um pull request revisado. Simples e suficiente para a maioria dos projetos de faculdade e de equipes pequenas.</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git push -u origin main
+                        > A `main` está no seu computador e no GitHub (☁).
+                        $ git switch -c feature/menu
+                        + git commit -m "menu"
+                        + git commit -m "ajustes"
+                        > Você cria uma branch curta para a tarefa e faz seus commits.
+                        $ git push -u origin feature/menu
+                        > Envia a branch para o GitHub e abre um **pull request** pedindo para juntar na `main`.
+                        $ github merge feature/menu
+                        > Depois da revisão, alguém clica em **Merge** no site. O commit de merge `D` existe só no GitHub por enquanto (tracejado).
+                        $ git switch main
+                        + git pull
+                        + git branch -d feature/menu
+                        + github delete feature/menu
+                        > Você atualiza a `main` local com `git pull` e apaga a branch, que já cumpriu seu papel.
+                    </script>
+                    <figcaption>GitHub Flow: branch curta, pull request, merge, atualizar e apagar.</figcaption>
+                </figure>
+
+                <h3>Git Flow</h3>
+                <p>Um modelo mais formal, com uma <code>develop</code> permanente e branches específicas para preparar versões (<code>release</code>) e corrigir produção (<code>hotfix</code>). Aparece em empresas com versões numeradas e datas de lançamento. Para projetos pequenos, costuma ser burocracia demais.</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "v1.0"
+                        = git tag v1.0
+                        = git switch -c develop
+                        = git commit -m "base dev"
+                        > Duas branches permanentes: `main` guarda só versões publicadas (com tags) e `develop` acumula o trabalho do dia a dia.
+                        $ git switch -c feature/carrinho
+                        + git commit -m "carrinho"
+                        + git commit -m "total"
+                        > Cada funcionalidade nasce da `develop` numa branch `feature/...`.
+                        $ git switch develop
+                        + git merge --no-ff feature/carrinho -m "merge"
+                        + git branch -d feature/carrinho
+                        > Pronta, a feature volta para a `develop` e a branch é apagada.
+                        $ git switch -c release/1.1
+                        + git commit -m "ajusta 1.1"
+                        > Uma branch `release` congela a versão. Nela entram só ajustes finais.
+                        $ git switch main
+                        + git merge --no-ff release/1.1 -m "versão 1.1"
+                        + git tag v1.1
+                        + git switch develop
+                        + git merge --no-ff release/1.1 -m "sincroniza"
+                        + git branch -d release/1.1
+                        > A release entra na `main` com a tag `v1.1` e também volta para a `develop`.
+                        $ git switch main
+                        + git switch -c hotfix/1.1.1
+                        + git commit -m "corrige"
+                        + git switch main
+                        + git merge --no-ff hotfix/1.1.1 -m "1.1.1"
+                        + git tag v1.1.1
+                        + git branch -d hotfix/1.1.1
+                        > Um bug urgente em produção: a `hotfix` sai da `main` e volta direto para ela. (Ela também seria levada para a `develop`.)
+                    </script>
+                    <figcaption>Git Flow: <code>main</code>, <code>develop</code>, <code>feature</code>, <code>release</code> e <code>hotfix</code>.</figcaption>
+                </figure>
+                <div class="callout tip">
+                    <p class="callout-title">Qual usar na faculdade?</p>
+                    <p>GitHub Flow. Uma branch por tarefa, pull request para a <code>main</code>, revisão de pelo menos um colega. Se o professor ou a empresa pedirem outro modelo, os conceitos são os mesmos.</p>
+                </div>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

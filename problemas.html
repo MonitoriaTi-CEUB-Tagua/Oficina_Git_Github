@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Problemas e soluções | Oficina Git & GitHub</title>
+    <meta name="description" content="Os erros mais comuns de Git e GitHub com explicação e solução: push rejeitado, conflitos, autenticação, detached HEAD, commit errado, arquivo grande e mais.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip help">Ajuda</span> Capítulo 10</p>
+                    <h1>Problemas e soluções</h1>
+                    <p class="lead">Deu erro? Copie um pedaço da mensagem e procure abaixo. Cada problema explica por que acontece e como resolver.</p>
+                </header>
+
+                <h2>Antes de tudo: três comandos de diagnóstico</h2>
+                <p>Quase todo problema fica claro com eles. Rode e leia com calma: o Git costuma dizer o que fazer.</p>
+                <pre data-label="terminal"># onde estou, o que mudou, estou à frente ou atrás do GitHub?
+git status
+
+# como está o histórico de todas as branches?
+git log --oneline --graph --all -15
+
+# para onde estou enviando?
+git remote -v</pre>
+
+                <h2 id="desfazer">Quero desfazer algo: qual comando?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Situação</th><th>Comando</th><th>Perigo</th></tr></thead>
+                        <tbody>
+                            <tr><td>Descartar mudanças num arquivo que não está no stage</td><td><code>git restore arquivo</code></td><td>Perde as mudanças do arquivo</td></tr>
+                            <tr><td>Tirar arquivo do stage (manter as mudanças)</td><td><code>git restore --staged arquivo</code></td><td>Nenhum</td></tr>
+                            <tr><td>Corrigir mensagem ou incluir arquivo no último commit (não enviado)</td><td><code>git commit --amend</code></td><td>Não use se já fez push</td></tr>
+                            <tr><td>Desfazer o último commit, mantendo as mudanças (não enviado)</td><td><code>git reset --soft HEAD~1</code></td><td>Não use se já fez push</td></tr>
+                            <tr><td>Desfazer o último commit e jogar fora as mudanças (não enviado)</td><td><code>git reset --hard HEAD~1</code></td><td>Perde o trabalho (recuperável pelo reflog)</td></tr>
+                            <tr><td>Desfazer um commit que <strong>já foi enviado</strong></td><td><code>git revert HASH</code></td><td>Nenhum: cria um commit novo</td></tr>
+                            <tr><td>Desistir de um merge com conflito</td><td><code>git merge --abort</code></td><td>Nenhum</td></tr>
+                            <tr><td>Recuperar commit “perdido”</td><td><code>git reflog</code> e <code>git branch resgate HASH</code></td><td>Nenhum</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git commit -m "login"
+                        = git commit -m "bug"
+                        > O commit `C` colocou um bug. Duas formas de desfazer:
+                        $ git reset --hard HEAD~1
+                        > **reset**: move a `main` de volta para `B`. O `C` sai do histórico (fica apagado). Ótimo se ninguém mais tem o `C`; péssimo se ele já foi enviado, porque os colegas ainda têm.
+                        $ git reset --hard C
+                        > (Desfazendo o reset: dá para voltar porque `C` ainda existe.)
+                        $ git revert C
+                        > **revert**: cria `D`, que faz o contrário de `C`. Nada some do histórico, então é seguro para commits já enviados.
+                    </script>
+                    <figcaption>reset reescreve o histórico; revert acrescenta um commit que desfaz.</figcaption>
+                </figure>
+
+                <h2>Encontre seu problema</h2>
+                <div class="search" data-search="#problem-list">
+                    <label class="visually-hidden" for="problem-search">Buscar problema</label>
+                    <input id="problem-search" type="search" placeholder="Ex.: rejected, conflict, permission denied, detached…" autocomplete="off">
+                    <div class="filters" role="group" aria-label="Filtrar por categoria">
+                        <button type="button" data-filter="todos" aria-pressed="true">Todos</button>
+                        <button type="button" data-filter="config" aria-pressed="false">Instalação</button>
+                        <button type="button" data-filter="auth" aria-pressed="false">Login</button>
+                        <button type="button" data-filter="remoto" aria-pressed="false">Push/pull</button>
+                        <button type="button" data-filter="branch" aria-pressed="false">Branches</button>
+                        <button type="button" data-filter="merge" aria-pressed="false">Conflitos</button>
+                        <button type="button" data-filter="desfazer" aria-pressed="false">Desfazer</button>
+                    </div>
+                    <p class="search-count" aria-live="polite"></p>
+                </div>
+
+                <div id="problem-list">
+
+                    <!-- ============================ instalação e configuração -->
+                    <details class="problem" id="git-nao-reconhecido" data-item data-cat="config">
+                        <summary><span class="sym">O terminal não reconhece o comando git</span><span class="err">'git' is not recognized as an internal or external command · git: command not found</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>O Git não está instalado, ou o terminal foi aberto antes da instalação e não sabe onde ele está (PATH).</p>
+                            <h4>Como resolver</h4>
+                            <ol>
+                                <li>Feche <strong>todos</strong> os terminais (inclusive o do VS Code) e abra de novo.</li>
+                                <li>Ainda não funciona? Reinstale pelo <a href="primeiros-passos.html#instalando-o-git">passo a passo</a>, deixando marcada a opção <em>Git from the command line and also from 3rd-party software</em>.</li>
+                                <li>No Windows, como alternativa, use o <strong>Git Bash</strong> (procure no menu Iniciar).</li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="quem-e-voce" data-item data-cat="config">
+                        <summary><span class="sym">O Git pergunta quem é você no commit</span><span class="err">Author identity unknown · *** Please tell me who you are.</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Nome e e-mail nunca foram configurados neste computador.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal">git config --global user.name "Seu Nome"
+git config --global user.email "seu-email@exemplo.com"</pre>
+                            <p>Depois, rode o <code>git commit</code> de novo.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="not-a-git-repository" data-item data-cat="config">
+                        <summary><span class="sym">Não é um repositório Git</span><span class="err">fatal: not a git repository (or any of the parent directories): .git</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Você está numa pasta que não é um repositório. Quase sempre é a pasta errada.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal"># onde estou?
+pwd
+# entre na pasta do projeto
+cd caminho/do/projeto
+# se for um projeto novo, aí sim:
+git init</pre>
+                            <p>Depois de um <code>git clone</code>, lembre de entrar na pasta criada: <code>cd nome-do-repo</code>.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="repositorio-dentro-de-repositorio" data-item data-cat="config">
+                        <summary><span class="sym">Pasta aparece com uma seta no GitHub e não abre</span><span class="err">warning: adding embedded git repository</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Existe um repositório dentro de outro: uma subpasta tem a sua própria pasta <code>.git</code> (de um <code>git init</code> ou <code>git clone</code> feito dentro do projeto). O Git guarda só uma referência para ela, não os arquivos.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal"># tira a referência do índice (os arquivos continuam na pasta)
+git rm --cached nome-da-subpasta
+
+# apaga o .git de DENTRO da subpasta (confira o caminho!)
+rm -rf nome-da-subpasta/.git
+
+# adiciona de novo, agora como arquivos normais
+git add nome-da-subpasta
+git commit -m "inclui arquivos da subpasta"</pre>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="preso-no-vim" data-item data-cat="config merge">
+                        <summary><span class="sym">Abriu uma tela estranha e não consigo sair</span><span class="err">Please enter a commit message… · Merge branch 'main'… (tela do Vim com ~ nas linhas)</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Você rodou <code>git commit</code> sem <code>-m</code>, ou um merge abriu o editor para confirmar a mensagem. O editor padrão é o Vim, que funciona de um jeito diferente.</p>
+                            <h4>Como resolver</h4>
+                            <ol>
+                                <li>Aperte <kbd>Esc</kbd>.</li>
+                                <li>Digite <code>:wq</code> e <kbd>Enter</kbd> para salvar e sair (a mensagem sugerida é usada).</li>
+                                <li>Para cancelar sem salvar: <kbd>Esc</kbd>, <code>:q!</code> e <kbd>Enter</kbd>.</li>
+                            </ol>
+                            <p>Para não ver o Vim de novo, use o VS Code como editor:</p>
+                            <pre data-label="terminal">git config --global core.editor "code --wait"</pre>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="lf-crlf" data-item data-cat="config">
+                        <summary><span class="sym">Aviso sobre LF e CRLF</span><span class="err">warning: LF will be replaced by CRLF the next time Git touches it</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Windows e Linux/macOS terminam linhas com caracteres diferentes. O Git está avisando que vai converter automaticamente. <strong>Não é erro</strong>.</p>
+                            <h4>Como resolver</h4>
+                            <p>Pode ignorar. Para padronizar, no Windows use <code>git config --global core.autocrlf true</code>. Em equipe, um arquivo <code>.gitattributes</code> com <code>* text=auto</code> resolve para todos.</p>
+                        </div>
+                    </details>
+
+                    <!-- ============================ autenticação -->
+                    <details class="problem" id="senha-nao-funciona" data-item data-cat="auth">
+                        <summary><span class="sym">A senha não funciona no push</span><span class="err">remote: Support for password authentication was removed · Authentication failed for 'https://github.com/…'</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>O GitHub não aceita a senha da conta em comandos Git.</p>
+                            <h4>Como resolver</h4>
+                            <ul>
+                                <li><strong>Windows:</strong> o Git Credential Manager abre o navegador para login. Se não abrir, reinstale o Git com as opções padrão.</li>
+                                <li><strong>Qualquer sistema:</strong> instale o <a href="https://cli.github.com/" target="_blank" rel="noopener noreferrer">GitHub CLI</a> e rode <code>gh auth login</code>.</li>
+                                <li><strong>Alternativa:</strong> configure uma <a href="primeiros-passos.html#conectando-o-computador-ao-github">chave SSH</a>.</li>
+                                <li>Se precisar digitar algo em “Password”, use um <em>personal access token</em> (GitHub → Settings → Developer settings), nunca a senha.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="publickey" data-item data-cat="auth">
+                        <summary><span class="sym">Permissão negada com SSH</span><span class="err">git@github.com: Permission denied (publickey). fatal: Could not read from remote repository.</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>O endereço do remoto usa SSH (<code>git@github.com:…</code>), mas o GitHub não reconhece nenhuma chave deste computador.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal"># testar a conexão
+ssh -T git@github.com
+
+# sem chave? crie uma e cadastre a PÚBLICA no GitHub
+ssh-keygen -t ed25519 -C "seu-email@exemplo.com"
+cat ~/.ssh/id_ed25519.pub
+
+# ou volte a usar HTTPS
+git remote set-url origin https://github.com/usuario/projeto.git</pre>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="403" data-item data-cat="auth remoto">
+                        <summary><span class="sym">Permissão negada ao repositório (403)</span><span class="err">remote: Permission to dono/projeto.git denied to voce. · error: 403</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Duas causas comuns:</p>
+                            <ol>
+                                <li>Você não tem permissão de escrita no repositório: não é colaborador, ou o convite não foi aceito (veja o e-mail ou <code>github.com/notifications</code>).</li>
+                                <li>O computador está logado em <strong>outra conta</strong> do GitHub (comum em laboratórios).</li>
+                            </ol>
+                            <h4>Como resolver</h4>
+                            <ul>
+                                <li>Peça ao dono para adicionar você em <em>Settings → Collaborators</em>, ou faça um <a href="github.html#colaborador-ou-fork">fork</a>.</li>
+                                <li>Conta errada no Windows: abra <em>Gerenciador de Credenciais → Credenciais do Windows</em>, remova as entradas <code>git:https://github.com</code> e faça o push de novo para logar.</li>
+                                <li>No macOS: <em>Acesso às Chaves</em> → procure <code>github.com</code> → apague.</li>
+                            </ul>
+                            <div class="callout warn">
+                                <p class="callout-title">Computador compartilhado</p>
+                                <p>Ao terminar num laboratório, remova suas credenciais do Gerenciador de Credenciais. Senão, a próxima pessoa envia commits com a sua conta.</p>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- ============================ push/pull -->
+                    <details class="problem" id="push-rejeitado" data-item data-cat="remoto">
+                        <summary><span class="sym">Push rejeitado</span><span class="err">! [rejected] main -> main (fetch first) · (non-fast-forward) · Updates were rejected because the remote contains work that you do not have locally</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Alguém enviou commits para a mesma branch depois do seu último pull. O GitHub não deixa você sobrescrever o trabalho dessa pessoa.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal">git pull
+# se der conflito, resolva (veja abaixo), depois:
+git push</pre>
+                            <figure class="gitviz">
+                                <script type="text/plain">
+                                    = git commit -m "início"
+                                    = git push -u origin main
+                                    = colega commit -m "colega"
+                                    = git commit -m "meu"
+                                    $ git push
+                                    > Rejeitado: o GitHub tem `B`, que você não tem.
+                                    $ git pull
+                                    > Junta o `B` com o seu `C` num merge.
+                                    $ git push
+                                    > Aceito.
+                                </script>
+                            </figure>
+                            <p><strong>Não</strong> use <code>git push --force</code>: ele apagaria o commit do colega.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="divergent-branches" data-item data-cat="remoto">
+                        <summary><span class="sym">O pull pede para escolher como juntar</span><span class="err">hint: You have divergent branches and need to specify how to reconcile them. · fatal: Need to specify how to reconcile divergent branches.</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Você e o GitHub têm commits diferentes, e o Git quer saber se junta com merge ou com rebase.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal"># escolha uma vez (merge é o comportamento clássico)
+git config --global pull.rebase false
+git pull</pre>
+                            <p>Prefere histórico linear? Use <code>git config --global pull.rebase true</code>. As diferenças estão em <a href="remotos.html#push-rejeitado-o-erro-mais-comum-de-quem-trabalha-em-grupo">Remotos</a>.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="no-upstream" data-item data-cat="remoto">
+                        <summary><span class="sym">A branch não tem upstream</span><span class="err">fatal: The current branch feature has no upstream branch.</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>É o primeiro push dessa branch, e o Git não sabe para onde enviar.</p>
+                            <h4>Como resolver</h4>
+                            <p>Use o comando que o próprio Git sugere:</p>
+                            <pre data-label="terminal">git push -u origin nome-da-branch</pre>
+                            <p>Nos próximos, basta <code>git push</code>. Para o Git fazer isso sozinho sempre: <code>git config --global push.autoSetupRemote true</code>.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="src-refspec" data-item data-cat="remoto">
+                        <summary><span class="sym">Push falha com src refspec</span><span class="err">error: src refspec main does not match any</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Não existe branch local com esse nome. Ou você ainda não fez nenhum commit, ou a branch se chama <code>master</code>.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal"># tem commit?
+git log --oneline
+# qual o nome da branch?
+git branch
+
+# sem commit: faça o primeiro
+git add .
+git commit -m "primeiro commit"
+
+# se chama master: renomeie
+git branch -M main
+git push -u origin main</pre>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="remote-exists" data-item data-cat="remoto">
+                        <summary><span class="sym">O remoto origin já existe</span><span class="err">error: remote origin already exists.</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>O repositório já tem um <code>origin</code> (talvez você clonou, ou já rodou o <code>remote add</code> antes).</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal"># ver para onde aponta
+git remote -v
+# trocar o endereço
+git remote set-url origin https://github.com/usuario/novo-repo.git</pre>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="unrelated-histories" data-item data-cat="remoto merge">
+                        <summary><span class="sym">Históricos sem relação</span><span class="err">fatal: refusing to merge unrelated histories</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Você criou o repositório no GitHub <strong>com</strong> README e também criou um repositório local com <code>git init</code>. São dois históricos que começaram separados.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal">git pull origin main --allow-unrelated-histories
+# resolva conflitos se aparecerem (geralmente no README), depois:
+git push -u origin main</pre>
+                            <p>Para evitar: ou comece pelo GitHub e clone, ou crie o repositório no GitHub vazio.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="arquivo-grande" data-item data-cat="remoto desfazer">
+                        <summary><span class="sym">Arquivo grande demais para o GitHub</span><span class="err">remote: error: File video.mp4 is 142.00 MB; this exceeds GitHub's file size limit of 100.00 MB</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>O GitHub recusa arquivos acima de 100 MB. Como o arquivo está em um commit, apagá-lo agora não basta: ele continua no histórico.</p>
+                            <h4>Como resolver</h4>
+                            <p>Se o arquivo entrou no último commit e ainda não foi enviado:</p>
+                            <pre data-label="terminal">git rm --cached video.mp4
+echo "video.mp4" &gt;&gt; .gitignore
+git add .gitignore
+git commit --amend --no-edit
+git push</pre>
+                            <p>Se entrou em commits mais antigos, desfaça os commits locais que ainda não foram enviados (<code>git reset --soft origin/main</code>), tire o arquivo e faça um commit novo. Para arquivos grandes que precisam ser versionados, use o <a href="https://git-lfs.com/" target="_blank" rel="noopener noreferrer">Git LFS</a>.</p>
+                        </div>
+                    </details>
+
+                    <!-- ============================ branches -->
+                    <details class="problem" id="local-changes-overwritten" data-item data-cat="branch remoto">
+                        <summary><span class="sym">Alterações locais seriam sobrescritas</span><span class="err">error: Your local changes to the following files would be overwritten by checkout/merge. Please commit your changes or stash them.</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Você tem arquivos editados sem commit e o comando (switch, pull, merge) precisaria substituí-los.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal"># opção 1: faça commit
+git add .
+git commit -m "trabalho em andamento"
+
+# opção 2: guarde na gaveta, rode o comando, devolva
+git stash
+git pull
+git stash pop
+
+# opção 3: descarte as alterações (cuidado: perde o trabalho)
+git restore .</pre>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="detached-head" data-item data-cat="branch">
+                        <summary><span class="sym">HEAD solto (detached HEAD)</span><span class="err">You are in 'detached HEAD' state. · HEAD detached at 3f9a2c1</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Você fez checkout de um commit (ou de uma tag) em vez de uma branch. Dá para olhar à vontade, mas commits feitos aqui ficam sem branch.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal"># só estava olhando? volte
+git switch main
+
+# fez commits e quer guardar? crie uma branch AQUI
+git switch -c minha-branch</pre>
+                            <p>Já saiu e perdeu os commits? Veja <a href="#perdi-commits">recuperar commits perdidos</a>.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="branch-errada" data-item data-cat="branch desfazer">
+                        <summary><span class="sym">Fiz commit na branch errada</span><span class="err">Fiz o commit na main, mas devia estar numa branch</span></summary>
+                        <div class="body">
+                            <h4>Como resolver (antes do push)</h4>
+                            <pre data-label="terminal"># 1. crie a branch apontando para onde você está (guarda o commit)
+git branch feature/nova-tela
+# 2. volte a main um commit
+git reset --hard HEAD~1
+# 3. continue na branch certa
+git switch feature/nova-tela</pre>
+                            <figure class="gitviz">
+                                <script type="text/plain">
+                                    = git commit -m "início"
+                                    = git commit -m "base"
+                                    = git commit -m "nova tela"
+                                    > O commit `C` foi feito na `main` por engano.
+                                    $ git branch feature/nova-tela
+                                    > Uma etiqueta nova guarda o `C`.
+                                    $ git reset --hard HEAD~1
+                                    > A `main` voltou para `B`. O `C` está seguro na `feature/nova-tela`.
+                                    $ git switch feature/nova-tela
+                                    > Pronto para continuar na branch certa.
+                                </script>
+                            </figure>
+                            <p>Se o commit era para uma branch que <strong>já existe</strong>: <code>git switch branch-certa</code>, <code>git cherry-pick HASH</code>, e depois volte à branch errada para tirar o commit com <code>git reset --hard HEAD~1</code>.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="perdi-commits" data-item data-cat="branch desfazer">
+                        <summary><span class="sym">Perdi commits (reset, branch apagada, detached HEAD)</span><span class="err">Meus commits sumiram do git log</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Commits sem nenhuma branch apontando não aparecem no <code>git log</code>, mas continuam no repositório por algumas semanas. O <strong>reflog</strong> registra todo lugar por onde o <code>HEAD</code> passou.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal">git reflog
+<span class="o">a1b2c3d HEAD@{0}: reset: moving to HEAD~1
+9f8e7d6 HEAD@{1}: commit: tela de login   &lt;- era esse!
+4e5f6a7 HEAD@{2}: checkout: moving from main to feature</span>
+
+# crie uma branch no commit perdido
+git branch resgate 9f8e7d6</pre>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="branch-nao-aparece" data-item data-cat="branch remoto">
+                        <summary><span class="sym">A branch do colega não aparece</span><span class="err">error: pathspec 'feature/x' did not match any file(s) known to git · fatal: invalid reference</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>Seu Git ainda não sabe que a branch existe no GitHub.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal">git fetch
+git branch -a          # deve aparecer remotes/origin/feature/x
+git switch feature/x   # cria a local ligada à remota</pre>
+                        </div>
+                    </details>
+
+                    <!-- ============================ conflitos -->
+                    <details class="problem" id="conflito" data-item data-cat="merge">
+                        <summary><span class="sym">Conflito de merge</span><span class="err">CONFLICT (content): Merge conflict in index.html · Automatic merge failed; fix conflicts and then commit the result.</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>As duas versões mudaram as mesmas linhas. O Git precisa que você escolha o resultado.</p>
+                            <h4>Como resolver</h4>
+                            <ol>
+                                <li><code>git status</code> mostra os arquivos em <em>both modified</em>.</li>
+                                <li>Abra cada um, procure <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, deixe a versão final e apague as marcações (<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>). No VS Code, use os botões <em>Accept…</em>.</li>
+                                <li>Teste o projeto.</li>
+                                <li><code>git add arquivo</code> e <code>git commit</code>.</li>
+                            </ol>
+                            <p>Quer desistir? <code>git merge --abort</code>. Passo a passo completo em <a href="merge.html#conflitos-quando-o-git-precisa-da-sua-decisao">Merge e conflitos</a>.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="conflito-rebase" data-item data-cat="merge">
+                        <summary><span class="sym">Conflito durante rebase ou pull --rebase</span><span class="err">CONFLICT … could not apply 9f8e7d6… · interactive rebase in progress</span></summary>
+                        <div class="body">
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal"># resolva os arquivos, então:
+git add arquivo
+git rebase --continue
+# pode parar de novo no próximo commit; repita
+
+# ou desista e volte ao estado anterior
+git rebase --abort</pre>
+                            <p>No rebase, “current” e “incoming” se invertem: <code>HEAD</code> é a branch de destino e o “incoming” é o seu commit sendo reaplicado.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="marcadores-commitados" data-item data-cat="merge">
+                        <summary><span class="sym">Commitei o arquivo com as marcações de conflito</span><span class="err">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD aparecendo no site ou no código</span></summary>
+                        <div class="body">
+                            <h4>Como resolver</h4>
+                            <p>Sem pânico: é só um arquivo com texto errado. Edite, remova as marcações, deixe a versão correta e faça um commit novo:</p>
+                            <pre data-label="terminal"># procurar marcações esquecidas no projeto
+git grep -n "&lt;&lt;&lt;&lt;&lt;&lt;&lt;"
+# depois de corrigir
+git add .
+git commit -m "remove marcações de conflito"</pre>
+                        </div>
+                    </details>
+
+                    <!-- ============================ desfazer -->
+                    <details class="problem" id="mensagem-errada" data-item data-cat="desfazer">
+                        <summary><span class="sym">Errei a mensagem do commit</span><span class="err">Commit com mensagem errada ou com erro de digitação</span></summary>
+                        <div class="body">
+                            <h4>Ainda não fez push</h4>
+                            <pre data-label="terminal">git commit --amend -m "mensagem correta"</pre>
+                            <h4>Já fez push</h4>
+                            <p>Deixe como está. Alterar exigiria <code>push --force</code>, o que atrapalha quem já baixou. Uma mensagem imperfeita não faz mal.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="esqueci-arquivo" data-item data-cat="desfazer">
+                        <summary><span class="sym">Esqueci um arquivo no último commit</span><span class="err">O commit foi sem um arquivo que devia ir junto</span></summary>
+                        <div class="body">
+                            <pre data-label="terminal">git add arquivo-esquecido.css
+git commit --amend --no-edit</pre>
+                            <p>Só antes do push. Depois do push, faça um commit novo normal.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="desfazer-commit-local" data-item data-cat="desfazer">
+                        <summary><span class="sym">Quero desfazer o último commit (não enviado)</span><span class="err">Fiz commit cedo demais / commitei o que não devia</span></summary>
+                        <div class="body">
+                            <pre data-label="terminal"># desfaz o commit, mantém as mudanças preparadas (staged)
+git reset --soft HEAD~1
+
+# desfaz o commit, mantém as mudanças na pasta (fora do stage)
+git reset HEAD~1
+
+# desfaz o commit E joga fora as mudanças
+git reset --hard HEAD~1</pre>
+                            <p><code>HEAD~1</code> é “um commit antes do atual”; <code>HEAD~3</code> volta três.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="desfazer-commit-enviado" data-item data-cat="desfazer remoto">
+                        <summary><span class="sym">Quero desfazer um commit que já foi enviado</span><span class="err">O commit com problema já está no GitHub</span></summary>
+                        <div class="body">
+                            <pre data-label="terminal">git log --oneline        # ache o hash do commit
+git revert 9f8e7d6       # cria um commit que desfaz aquele
+git push</pre>
+                            <p>O <code>revert</code> não reescreve o histórico, então ninguém da equipe é prejudicado. Para desfazer um commit de merge: <code>git revert -m 1 HASH</code>.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="senha-commitada" data-item data-cat="desfazer">
+                        <summary><span class="sym">Commitei uma senha, token ou arquivo .env</span><span class="err">Segredo exposto no repositório · GitHub push protection: secret detected</span></summary>
+                        <div class="body">
+                            <div class="callout danger">
+                                <p class="callout-title">Primeiro: troque o segredo</p>
+                                <p>Se foi enviado ao GitHub, considere que vazou, mesmo em repositório privado e mesmo se você apagar depois. Gere uma senha ou chave nova no serviço e desative a antiga. Só depois limpe o repositório.</p>
+                            </div>
+                            <h4>Ainda não fez push</h4>
+                            <pre data-label="terminal">git rm --cached .env
+echo ".env" &gt;&gt; .gitignore
+git add .gitignore
+git commit --amend --no-edit</pre>
+                            <h4>Já fez push</h4>
+                            <p>Remova o arquivo num commit novo e adicione ao <code>.gitignore</code>. Apagar do histórico inteiro exige ferramentas como <a href="https://github.com/newren/git-filter-repo" target="_blank" rel="noopener noreferrer">git filter-repo</a> e um push forçado; peça ajuda aos monitores.</p>
+                            <p>Se o GitHub bloqueou o push (<em>push protection</em>), ele já evitou o vazamento: tire o segredo do commit (amend ou reset) e envie de novo.</p>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="gitignore-nao-funciona" data-item data-cat="desfazer config">
+                        <summary><span class="sym">Coloquei no .gitignore, mas o arquivo continua aparecendo</span><span class="err">.gitignore não funciona · node_modules continua no git status</span></summary>
+                        <div class="body">
+                            <h4>Por que acontece</h4>
+                            <p>O <code>.gitignore</code> só vale para arquivos que ainda não são rastreados. Se o arquivo já entrou num commit, o Git continua acompanhando.</p>
+                            <h4>Como resolver</h4>
+                            <pre data-label="terminal"># para de rastrear (o arquivo continua no seu computador)
+git rm --cached arquivo
+git rm -r --cached node_modules/
+
+git commit -m "para de versionar arquivos ignorados"</pre>
+                        </div>
+                    </details>
+
+                    <details class="problem" id="descartar-tudo" data-item data-cat="desfazer">
+                        <summary><span class="sym">Quero descartar tudo e voltar ao último commit</span><span class="err">Baguncei tudo, quero começar de novo</span></summary>
+                        <div class="body">
+                            <pre data-label="terminal"># descarta mudanças em arquivos rastreados
+git restore .
+
+# mostra arquivos novos que seriam apagados (simulação)
+git clean -n
+# apaga de verdade arquivos e pastas não rastreados
+git clean -fd
+
+# deixar igualzinho ao GitHub (perde commits locais não enviados!)
+git fetch
+git reset --hard origin/main</pre>
+                            <p>Tudo isso é <strong>irreversível</strong> para mudanças sem commit. Na dúvida, rode antes <code>git stash -u</code>, que guarda tudo numa gaveta.</p>
+                        </div>
+                    </details>
+
+                </div>
+
+                <div class="callout tip">
+                    <p class="callout-title">Não achou o seu problema?</p>
+                    <p>Copie a mensagem de erro completa e procure na internet. Quase sempre alguém já passou por isso. Ou chame os monitores com o resultado do <code>git status</code> em mãos.</p>
+                </div>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

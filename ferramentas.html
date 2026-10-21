@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ferramentas do dia a dia | Oficina Git & GitHub</title>
+    <meta name="description" content="Use Git pelo terminal, pelo VS Code ou pelo GitHub Desktop. Tabela de equivalência entre eles, extensões úteis, aliases e o GitHub CLI.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip practice">Prática</span> Capítulo 9</p>
+                    <h1>Ferramentas do dia a dia</h1>
+                    <p class="lead">Terminal, VS Code ou GitHub Desktop: todos usam o mesmo Git por baixo. Escolha o que for mais confortável e misture quando quiser.</p>
+                </header>
+
+                <h2>Terminal ou interface gráfica?</h2>
+                <div class="grid-2">
+                    <div class="panel">
+                        <h3>Terminal</h3>
+                        <p>Funciona igual em qualquer computador e servidor, mostra mensagens completas e tem todos os comandos. Tutoriais e respostas na internet usam o terminal.</p>
+                        <p><strong>Vale aprender</strong>, mesmo que você use outra ferramenta no dia a dia.</p>
+                    </div>
+                    <div class="panel">
+                        <h3>Interface gráfica</h3>
+                        <p>Mostra visualmente o que mudou, facilita escolher linhas para o commit e resolver conflitos. Menos chance de errar o comando.</p>
+                        <p>Cuidado: um clique às vezes roda vários comandos. Saiba o que cada botão faz.</p>
+                    </div>
+                </div>
+                <p>Não precisa escolher um só. O repositório é o mesmo: você pode fazer o commit no VS Code e o push no terminal, por exemplo.</p>
+
+                <h2>Git no VS Code</h2>
+                <p>O VS Code já vem com Git integrado. Abra a pasta do projeto (<em>File → Open Folder</em>) e clique no ícone de ramificação na barra lateral, ou use <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>.</p>
+                <ol class="steps">
+                    <li><strong>Veja as mudanças.</strong> Arquivos alterados aparecem com <code>M</code> (modificado), <code>U</code> (novo, untracked) ou <code>D</code> (apagado). Clique num arquivo para ver o diff lado a lado.</li>
+                    <li><strong>Prepare</strong> clicando no <strong>+</strong> ao lado do arquivo (<code>git add</code>). Para escolher só algumas linhas, selecione-as no diff, clique com o botão direito e escolha <em>Stage Selected Ranges</em>.</li>
+                    <li><strong>Escreva a mensagem</strong> na caixa do topo e clique em <strong>Commit</strong>.</li>
+                    <li><strong>Sincronize.</strong> O botão <em>Sync Changes</em> faz pull e depois push. Os números ao lado (↓1 ↑2) mostram quantos commits faltam baixar e enviar.</li>
+                    <li><strong>Troque de branch</strong> clicando no nome da branch no canto inferior esquerdo. Ali também dá para criar uma nova.</li>
+                </ol>
+                <p>Também vale conhecer:</p>
+                <ul>
+                    <li><strong>Conflitos</strong>: o VS Code mostra botões <em>Accept Current / Incoming / Both</em> e o <em>Merge Editor</em> de três painéis (veja <a href="merge.html#no-vs-code-e-mais-facil">no capítulo de merge</a>).</li>
+                    <li><strong>Timeline</strong> (no Explorer, embaixo): histórico de commits do arquivo aberto.</li>
+                    <li><strong>Clonar</strong>: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → <em>Git: Clone</em>.</li>
+                </ul>
+                <h3>Extensões que ajudam</h3>
+                <dl class="term-list">
+                    <dt>Git Graph</dt>
+                    <dd>Desenha o grafo de commits de todas as branches, como os deste guia. Ótimo para entender o que está acontecendo.</dd>
+                    <dt>GitLens</dt>
+                    <dd>Mostra quem alterou cada linha e quando (blame), e oferece um histórico rico.</dd>
+                    <dt>GitHub Pull Requests</dt>
+                    <dd>Cria, revisa e comenta pull requests sem sair do editor.</dd>
+                </dl>
+
+                <h2>GitHub Desktop</h2>
+                <p>Aplicativo oficial do GitHub para Windows e macOS. Bom para quem está começando ou prefere não usar o terminal.</p>
+                <ol class="steps">
+                    <li><strong>Entre na conta</strong> em <em>File → Options → Accounts</em> (no macOS, <em>Settings</em>) e confira nome e e-mail na aba <em>Git</em>.</li>
+                    <li><strong>Pegue um repositório</strong>: <em>File → Clone repository</em> (do GitHub), <em>Add local repository</em> (pasta que já é repositório) ou <em>New repository</em>.</li>
+                    <li><strong>Crie uma branch</strong> em <em>Current branch → New branch</em>.</li>
+                    <li><strong>Edite no seu editor</strong> e volte ao Desktop. Em <em>Changes</em>, marque os arquivos que entram no commit, escreva o <em>Summary</em> e clique em <em>Commit to …</em>.</li>
+                    <li><strong>Envie</strong>: <em>Publish branch</em> no primeiro envio, <em>Push origin</em> nos seguintes. Depois, <em>Create Pull Request</em> abre o GitHub no navegador.</li>
+                    <li><strong>Atualize</strong> com <em>Fetch origin</em>; se houver novidades, o botão vira <em>Pull origin</em>.</li>
+                </ol>
+
+                <h2>O mesmo comando em cada ferramenta</h2>
+                <div class="table-wrap wide">
+                    <table>
+                        <thead><tr><th>Quero…</th><th>Terminal</th><th>VS Code</th><th>GitHub Desktop</th></tr></thead>
+                        <tbody>
+                            <tr><td>Baixar um repositório</td><td><code>git clone URL</code></td><td><em>Git: Clone</em> na paleta</td><td><em>File → Clone repository</em></td></tr>
+                            <tr><td>Ver o que mudou</td><td><code>git status</code>, <code>git diff</code></td><td>Painel Source Control</td><td>Aba <em>Changes</em></td></tr>
+                            <tr><td>Preparar arquivo</td><td><code>git add arquivo</code></td><td><strong>+</strong> no arquivo</td><td>Marcar a caixa do arquivo</td></tr>
+                            <tr><td>Fazer commit</td><td><code>git commit -m "..."</code></td><td>Mensagem + <em>Commit</em></td><td>Summary + <em>Commit to …</em></td></tr>
+                            <tr><td>Criar branch</td><td><code>git switch -c nome</code></td><td>Nome da branch (canto inferior) → <em>Create new branch</em></td><td><em>Current branch → New branch</em></td></tr>
+                            <tr><td>Trocar de branch</td><td><code>git switch nome</code></td><td>Nome da branch (canto inferior)</td><td><em>Current branch</em></td></tr>
+                            <tr><td>Enviar</td><td><code>git push</code></td><td><em>Sync Changes</em> ou <em>Push</em></td><td><em>Push origin</em></td></tr>
+                            <tr><td>Receber</td><td><code>git pull</code></td><td><em>Sync Changes</em> ou <em>Pull</em></td><td><em>Fetch</em> → <em>Pull origin</em></td></tr>
+                            <tr><td>Juntar branch</td><td><code>git merge nome</code></td><td><em>Git: Merge Branch…</em> na paleta</td><td><em>Branch → Merge into current branch</em></td></tr>
+                            <tr><td>Ver histórico</td><td><code>git log --oneline --graph</code></td><td>Git Graph / Timeline</td><td>Aba <em>History</em></td></tr>
+                            <tr><td>Guardar temporariamente</td><td><code>git stash</code></td><td><em>Git: Stash</em> na paleta</td><td>Botão direito em Changes → <em>Stash all changes</em></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Outras ferramentas</h2>
+                <dl class="term-list">
+                    <dt>GitHub CLI (<code>gh</code>)</dt>
+                    <dd>Faz no terminal o que você faria no site: <code>gh repo create</code>, <code>gh pr create</code>, <code>gh pr checkout 12</code>, <code>gh issue list</code>.</dd>
+                    <dt>github.dev e Codespaces</dt>
+                    <dd>VS Code no navegador. O github.dev (tecla <kbd>.</kbd> no repositório) edita arquivos; o Codespaces cria uma máquina completa na nuvem, com terminal.</dd>
+                    <dt>IDEs da JetBrains</dt>
+                    <dd>IntelliJ, PyCharm e WebStorm têm Git integrado, com um ótimo resolvedor de conflitos.</dd>
+                    <dt>GitKraken, Fork, Sourcetree</dt>
+                    <dd>Clientes gráficos dedicados, com grafo de branches visual.</dd>
+                    <dt>lazygit</dt>
+                    <dd>Interface visual dentro do terminal, controlada pelo teclado.</dd>
+                </dl>
+
+                <h2>Atalhos que economizam tempo</h2>
+                <h3>Aliases: apelidos para comandos longos</h3>
+                <pre data-label="terminal">git config --global alias.st status
+git config --global alias.sw switch
+git config --global alias.lg "log --oneline --graph --all --decorate"
+
+# agora:
+git st
+git lg</pre>
+                <p>O <code>git lg</code> desenha no terminal um grafo parecido com os deste guia. Use sempre que ficar perdido.</p>
+                <h3>Pequenos truques</h3>
+                <ul>
+                    <li><code>git switch -</code> volta para a branch anterior.</li>
+                    <li><code>git commit -am "msg"</code> adiciona arquivos já rastreados e faz o commit numa linha só.</li>
+                    <li><code>git log --oneline -5</code> mostra só os últimos 5 commits.</li>
+                    <li><code>git diff --stat</code> mostra só quais arquivos mudaram e quantas linhas.</li>
+                    <li><code>git show HEAD~1:index.html</code> mostra como o arquivo era um commit atrás.</li>
+                    <li>No Git Bash, <kbd>Tab</kbd> completa nomes de branches e comandos.</li>
+                </ul>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

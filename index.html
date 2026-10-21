@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Oficina de Git & GitHub | Monitoria CEUB</title>
+    <meta name="description" content="Guia da oficina de Git e GitHub da monitoria do CEUB: teoria, prática, grafos interativos de branches e solução de problemas.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<section class="hero" aria-labelledby="hero-title">
+                    <div>
+                        <h1 id="hero-title">Oficina de Git e GitHub</h1>
+                        <p class="lead">Aprenda a guardar cada versão do seu código, trabalhar em paralelo sem medo de estragar nada e colaborar com outras pessoas pela internet. Cada comando vem com um grafo que mostra o que aconteceu.</p>
+                        <div class="hero-actions">
+                            <a class="btn" href="conceitos.html">Começar pela teoria</a>
+                            <a class="btn ghost" href="laboratorio.html">Praticar no laboratório</a>
+                        </div>
+                    </div>
+                    <figure class="gitviz" data-autoplay>
+                        <script type="text/plain">
+                            = git commit -m "início"
+                            = git commit -m "página"
+                            > Este é o histórico de um projeto: cada bolinha é um commit, uma versão salva. A etiqueta `main` marca a versão principal.
+                            $ git switch -c feature
+                            > Você cria uma **branch** chamada `feature` para testar uma ideia nova sem mexer na `main`.
+                            $ git commit -m "menu"
+                            > Um commit novo entra só na `feature`. A `main` continua do jeito que estava.
+                            $ git commit -m "estilo"
+                            > Mais um commit na `feature`. A linha colorida é o seu trabalho em paralelo.
+                            $ git switch main
+                            + git commit -m "corrige"
+                            > Enquanto isso, alguém corrige algo na `main`. Agora o histórico tem dois caminhos.
+                            $ git merge feature
+                            > O **merge** junta os dois caminhos em um commit com dois pais. Ninguém perdeu trabalho.
+                            $ git push -u origin main
+                            > O **push** envia tudo para o GitHub. A nuvem ☁ na etiqueta indica que o GitHub está igual ao seu computador.
+                        </script>
+                        <figcaption>Grafo interativo: use os botões ou as setas do teclado. Ele avança sozinho até você clicar.</figcaption>
+                    </figure>
+                </section>
+
+                <h2 id="git-x-github">Git e GitHub não são a mesma coisa</h2>
+                <p>É a confusão mais comum de quem começa. Vale fixar desde já:</p>
+                <div class="versus">
+                    <div class="panel accent" style="--c: var(--lane-0)">
+                        <h3>Git</h3>
+                        <p>Um <strong>programa</strong> que roda no seu computador e registra o histórico de uma pasta. Funciona sem internet.</p>
+                        <p>Criado em 2005 por Linus Torvalds para organizar o desenvolvimento do Linux. É gratuito e de código aberto.</p>
+                    </div>
+                    <span class="vs" aria-hidden="true">≠</span>
+                    <div class="panel accent" style="--c: var(--lane-1)">
+                        <h3>GitHub</h3>
+                        <p>Um <strong>site</strong> que guarda cópias de repositórios Git na nuvem e adiciona ferramentas de equipe: pull requests, issues, revisão de código, automações.</p>
+                        <p>Não é o único: GitLab, Bitbucket e outros fazem o mesmo papel.</p>
+                    </div>
+                </div>
+                <div class="callout analogy">
+                    <p class="callout-title">Analogia</p>
+                    <p>O Git é a câmera que tira fotos do seu projeto. O GitHub é o álbum compartilhado na nuvem, onde a turma toda vê, comenta e junta as fotos.</p>
+                </div>
+
+                <h2 id="roteiro">Roteiro da oficina</h2>
+                <p>Os capítulos seguem a ordem da oficina, mas você pode pular direto para o que precisar.</p>
+                <ol class="route">
+                    <li style="--c: var(--lane-0)">
+                        <span class="stop">1</span>
+                        <div class="leg">
+                            <h3>Teoria: como o Git pensa</h3>
+                            <p>Commits, hash, as três áreas, branches como etiquetas e a diferença entre local e remoto.</p>
+                            <ul><li><a href="conceitos.html">Como o Git funciona</a></li></ul>
+                        </div>
+                    </li>
+                    <li style="--c: var(--lane-2)">
+                        <span class="stop">2</span>
+                        <div class="leg">
+                            <h3>Git no seu computador</h3>
+                            <p>Instalar, configurar, salvar versões, criar branches e juntar trabalhos.</p>
+                            <ul>
+                                <li><a href="primeiros-passos.html">Instalação</a></li>
+                                <li><a href="commits.html">Commits</a></li>
+                                <li><a href="branches.html">Branches</a></li>
+                                <li><a href="merge.html">Merge, rebase e conflitos</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li style="--c: var(--lane-1)">
+                        <span class="stop">3</span>
+                        <div class="leg">
+                            <h3>Git online</h3>
+                            <p>Enviar e receber mudanças, colaborar com pull requests e conhecer as alternativas ao GitHub.</p>
+                            <ul>
+                                <li><a href="remotos.html">Push, pull e fetch</a></li>
+                                <li><a href="github.html">Colaborando no GitHub</a></li>
+                                <li><a href="plataformas.html">GitHub, GitLab e outras</a></li>
+                                <li><a href="ferramentas.html">VS Code e GitHub Desktop</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li style="--c: var(--lane-3)">
+                        <span class="stop">4</span>
+                        <div class="leg">
+                            <h3>Prática e ajuda</h3>
+                            <p>Desafios num terminal simulado, os erros mais comuns com a solução e uma folha de consulta.</p>
+                            <ul>
+                                <li><a href="laboratorio.html">Laboratório</a></li>
+                                <li><a href="problemas.html">Problemas e soluções</a></li>
+                                <li><a href="referencia.html">Consulta rápida</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ol>
+
+                <h2 id="antes-da-oficina">Antes da oficina</h2>
+                <p>Chegue com isso pronto para aproveitar melhor o tempo. As marcações ficam salvas neste navegador.</p>
+                <ul class="checklist" data-save>
+                    <li><input type="checkbox" id="c1"><label for="c1">Instalei o Git e o comando <code>git --version</code> funciona (<a href="primeiros-passos.html#instalando-o-git">como instalar</a>)</label></li>
+                    <li><input type="checkbox" id="c2"><label for="c2">Criei minha conta em <a href="https://github.com/signup" target="_blank" rel="noopener noreferrer">github.com</a></label></li>
+                    <li><input type="checkbox" id="c3"><label for="c3">Instalei o <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer">VS Code</a> (ou outro editor de sua preferência)</label></li>
+                    <li><input type="checkbox" id="c4"><label for="c4">Configurei meu nome e e-mail no Git (<a href="primeiros-passos.html#configuracao-inicial">passo a passo</a>)</label></li>
+                    <li><input type="checkbox" id="c5"><label for="c5">Opcional: instalei o <a href="https://desktop.github.com/" target="_blank" rel="noopener noreferrer">GitHub Desktop</a></label></li>
+                </ul>
+
+                <h2 id="como-ler-os-grafos">Como ler os grafos deste guia</h2>
+                <p>Todos os desenhos de histórico seguem as mesmas regras. Os grafos interativos rodam comandos Git de verdade num simulador, então o que você vê é o que o Git faria.</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git commit -m "base"
+                        = git switch -c feature
+                        = git commit -m "menu"
+                        = git switch main
+                        = git merge --no-ff feature -m "merge"
+                        = git push -u origin main
+                        = colega commit -m "do colega"
+                    </script>
+                    <figcaption>Um histórico com branch, merge e um commit que só existe no GitHub.</figcaption>
+                </figure>
+                <dl class="term-list">
+                    <dt>Bolinha cheia com letra</dt>
+                    <dd>Um commit. Nos grafos usamos letras (A, B, C) no lugar do hash real, que seria algo como <code>3f9a2c1</code>.</dd>
+                    <dt>Cor da linha</dt>
+                    <dd>Cada branch tem uma cor. A <code>main</code> é sempre a linha de cima.</dd>
+                    <dt>Bolinha vazada</dt>
+                    <dd>Commit de merge: ele tem dois pais, um de cada caminho.</dd>
+                    <dt>Etiqueta colorida</dt>
+                    <dd>Uma branch apontando para aquele commit. O <code>☁</code> indica que o GitHub está na mesma posição.</dd>
+                    <dt>HEAD</dt>
+                    <dd>“Você está aqui”: a branch em que você está trabalhando agora.</dd>
+                    <dt>Contorno tracejado</dt>
+                    <dd>Commit que existe no GitHub mas ainda não foi baixado para o seu computador. A etiqueta <code>origin/main</code> mostra a última posição conhecida do GitHub.</dd>
+                    <dt>Bolinha apagada</dt>
+                    <dd>Commit que ficou sem nenhuma branch apontando (depois de um reset ou rebase, por exemplo). Ainda dá para recuperá-lo por um tempo.</dd>
+                </dl>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Como o Git funciona | Oficina Git & GitHub</title>
+    <meta name="description" content="A lógica por trás do Git: versionamento, commits como fotos, hash, as três áreas, branches como etiquetas, HEAD e a diferença entre local e remoto.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip theory">Teoria</span> Capítulo 1</p>
+                    <h1>Como o Git funciona</h1>
+                    <p class="lead">Antes de decorar comandos, entenda o modelo mental. Com ele, quase todo comando do Git passa a fazer sentido sozinho.</p>
+                    <div class="goals">
+                        <p>Ao final você vai saber:</p>
+                        <ul>
+                            <li>o que é versionamento e por que todo projeto precisa dele;</li>
+                            <li>o que existe dentro de um commit e o que é o hash;</li>
+                            <li>por onde um arquivo passa até virar histórico (as três áreas);</li>
+                            <li>por que criar uma branch é instantâneo, e o que é o <code>HEAD</code>.</li>
+                        </ul>
+                    </div>
+                </header>
+
+                <h2>O problema que o Git resolve</h2>
+                <p>Se você já entregou um trabalho, provavelmente já viu uma pasta assim:</p>
+                <pre data-label="pasta sem controle de versão" data-nocopy data-raw>trabalho-final.docx
+trabalho-final-v2.docx
+trabalho-final-v2-corrigido.docx
+trabalho-final-v3-AGORA-VAI.docx
+trabalho-final-v3-AGORA-VAI-revisao-do-joao.docx</pre>
+                <p>Funciona até a primeira dúvida: qual é a versão certa? O que mudou entre a v2 e a v3? Quem apagou aquele parágrafo? Como juntar o que o João e a Maria editaram ao mesmo tempo?</p>
+                <p>Um <strong>sistema de controle de versão</strong> responde essas perguntas. Ele guarda o histórico de um projeto: cada versão, quem fez, quando e por quê. Você volta a qualquer ponto, compara versões e junta o trabalho de várias pessoas. O Git é o sistema de controle de versão mais usado no mundo.</p>
+
+                <h2>Centralizado ou distribuído</h2>
+                <div class="grid-2">
+                    <div class="panel">
+                        <h3>Centralizado (SVN, CVS)</h3>
+                        <p>Existe um servidor com o histórico. Cada pessoa tem só a versão atual dos arquivos e precisa de conexão para salvar uma versão nova ou ver o passado.</p>
+                        <p>Se o servidor cair, ninguém trabalha.</p>
+                    </div>
+                    <div class="panel">
+                        <h3>Distribuído (Git)</h3>
+                        <p>Cada computador tem uma cópia <strong>completa</strong> do histórico. Você faz commits, cria branches e consulta o passado sem internet.</p>
+                        <p>O GitHub é só mais uma cópia, que a equipe combinou de usar como ponto de encontro.</p>
+                    </div>
+                </div>
+
+                <h2>Commit: uma foto do projeto inteiro</h2>
+                <p>Um <strong>commit</strong> é uma versão salva do projeto. Pense nele como uma foto de todos os arquivos naquele momento. Arquivos que não mudaram não são copiados de novo: o Git reaproveita a versão anterior, por isso o histórico fica leve.</p>
+                <p>Cada commit guarda:</p>
+                <ul>
+                    <li><strong>a foto</strong> dos arquivos (o conteúdo de cada um);</li>
+                    <li><strong>autor e data</strong>, vindos da sua configuração <code>user.name</code> e <code>user.email</code>;</li>
+                    <li><strong>uma mensagem</strong> explicando o que mudou;</li>
+                    <li><strong>o pai</strong>: o commit que veio antes. É isso que forma a corrente do histórico.</li>
+                </ul>
+                <p>Você pode ver tudo isso com um comando:</p>
+                <pre data-label="terminal">git cat-file -p HEAD
+<span class="o">tree 8f2b1c0e4a7d9f3b2c5e6a1d0f9e8c7b6a5d4c3b
+parent 3f9a2c1d8e7b6a5f4c3d2e1f0a9b8c7d6e5f4a3b
+author Ana Souza &lt;ana@exemplo.com&gt; 1729425600 -0300
+committer Ana Souza &lt;ana@exemplo.com&gt; 1729425600 -0300
+
+adiciona menu de navegação</span></pre>
+                <p>Como cada commit aponta para o pai, o histórico vira uma corrente. Nos grafos, a seta vai do pai para o filho, da esquerda para a direita:</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "cria site"
+                        = git commit -m "menu"
+                        = git commit -m "rodapé"
+                        = git commit -m "corrige"
+                    </script>
+                    <figcaption>Quatro commits em sequência. <code>D</code> conhece o pai <code>C</code>, que conhece <code>B</code>, que conhece <code>A</code>.</figcaption>
+                </figure>
+
+                <h3>O hash: a impressão digital do commit</h3>
+                <p>Cada commit recebe um identificador como <code>3f9a2c1d8e7b6a5f4c3d2e1f0a9b8c7d6e5f4a3b</code>. Esse <strong>hash</strong> é calculado a partir de tudo o que o commit contém: arquivos, autor, data, mensagem e o hash do pai.</p>
+                <ul>
+                    <li>Mudou uma vírgula? O hash muda. Por isso o histórico não pode ser alterado sem que ninguém perceba.</li>
+                    <li>Como o hash do pai entra na conta, mudar um commit antigo muda o hash de todos os que vêm depois.</li>
+                    <li>No dia a dia você usa só os primeiros 7 caracteres: <code>git show 3f9a2c1</code>.</li>
+                </ul>
+                <div class="callout tip">
+                    <p class="callout-title">Por que isso importa</p>
+                    <p>Quando um comando “reescreve o histórico” (<code>rebase</code>, <code>commit --amend</code>, <code>reset</code>), ele cria commits <em>novos</em>, com hashes novos. Os antigos não mudam: ficam para trás. Guarde essa ideia; ela explica vários problemas mais à frente.</p>
+                </div>
+
+                <h2>As três áreas</h2>
+                <p>Este é o conceito que mais confunde no começo. Um arquivo passa por três lugares até virar histórico:</p>
+                <dl class="term-list">
+                    <dt>Pasta de trabalho</dt>
+                    <dd>Os arquivos que você vê e edita no editor. Salvar com <kbd>Ctrl</kbd>+<kbd>S</kbd> muda só aqui.</dd>
+                    <dt>Staging (área de preparação)</dt>
+                    <dd>Uma lista do que vai entrar no próximo commit. Você escolhe com <code>git add</code>.</dd>
+                    <dt>Repositório</dt>
+                    <dd>O histórico de commits, guardado na pasta oculta <code>.git</code>. Entra aqui com <code>git commit</code>.</dd>
+                </dl>
+                <p>Experimente: edite arquivos, escolha o que vai para o stage clicando neles e faça commits.</p>
+                <div class="areas">
+                    <div class="areas-cols">
+                        <div class="area" data-area="wd">
+                            <h4>Pasta de trabalho</h4>
+                            <small>Seus arquivos, como estão agora</small>
+                            <ul class="area-files"></ul>
+                        </div>
+                        <div class="area" data-area="stage">
+                            <h4>Staging</h4>
+                            <small>O que vai entrar no próximo commit</small>
+                            <ul class="area-files"></ul>
+                        </div>
+                        <div class="area" data-area="repo">
+                            <h4>Repositório</h4>
+                            <small>Histórico de commits (.git)</small>
+                            <ul class="area-files"></ul>
+                        </div>
+                    </div>
+                    <div class="areas-actions">
+                        <button type="button" data-act="edit:index.html">Editar index.html</button>
+                        <button type="button" data-act="edit:style.css">Editar style.css</button>
+                        <button type="button" data-act="edit:notas.txt">Criar notas.txt</button>
+                        <button type="button" class="git" data-act="addall">git add .</button>
+                        <button type="button" class="git" data-act="commit">git commit</button>
+                        <button type="button" data-act="reset">Recomeçar</button>
+                    </div>
+                    <div class="areas-msg" aria-live="polite"></div>
+                </div>
+                <div class="callout analogy">
+                    <p class="callout-title">Analogia</p>
+                    <p>A pasta de trabalho é a mesa onde você monta as coisas. O staging é a caixa onde você coloca o que vai mandar. O commit fecha a caixa, cola uma etiqueta com a descrição e guarda no arquivo.</p>
+                </div>
+                <p><strong>Por que existe o staging?</strong> Para você fazer commits organizados. Se mexeu no menu e corrigiu um erro de digitação no rodapé, dá para fazer dois commits separados, cada um com sua mensagem, mesmo tendo editado tudo de uma vez.</p>
+
+                <h3>Os estados de um arquivo</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Estado</th><th>O que significa</th><th>Como aparece no <code>git status</code></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Untracked</strong> (não rastreado)</td><td>Arquivo novo que o Git ainda não acompanha.</td><td><code>Untracked files</code></td></tr>
+                            <tr><td><strong>Modified</strong> (modificado)</td><td>Arquivo conhecido que mudou desde o último commit.</td><td><code>Changes not staged for commit</code></td></tr>
+                            <tr><td><strong>Staged</strong> (preparado)</td><td>Mudança escolhida para o próximo commit.</td><td><code>Changes to be committed</code></td></tr>
+                            <tr><td><strong>Committed</strong></td><td>Igual ao último commit. Nada a fazer.</td><td><code>nothing to commit, working tree clean</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Branch é só uma etiqueta</h2>
+                <p>Aqui está o segredo que torna o Git tão rápido: uma <strong>branch não é uma cópia da pasta</strong>. Ela é só uma etiqueta com nome que aponta para um commit. Criar uma branch é criar uma etiqueta nova; custa praticamente nada.</p>
+                <p>O <code>HEAD</code> é outra etiqueta especial: ele indica <strong>em qual branch você está</strong>. Quando você faz um commit, a branch do <code>HEAD</code> avança para o commit novo e as outras ficam paradas.</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git commit -m "página"
+                        > Uma branch `main` apontando para `B`. O `HEAD` está nela.
+                        $ git branch teste
+                        > Criou a etiqueta `teste` no mesmo commit. Nenhum arquivo foi copiado e nenhum commit novo foi criado.
+                        $ git commit -m "título"
+                        > O commit novo entrou na branch do `HEAD`, que é a `main`. A etiqueta `main` andou para `C`; a `teste` ficou em `B`.
+                        $ git switch teste
+                        > Agora o `HEAD` está na `teste`. Os arquivos da pasta voltaram a ser os do commit `B`.
+                        $ git commit -m "ideia"
+                        > O commit `D` sai de `B`. O histórico se dividiu: são duas linhas de trabalho independentes.
+                    </script>
+                    <figcaption>As etiquetas se movem; os commits ficam onde estão.</figcaption>
+                </figure>
+                <p>Você vai se aprofundar nisso no capítulo de <a href="branches.html">branches</a>.</p>
+
+                <h2>Local e remoto</h2>
+                <p>Tudo até aqui acontece no seu computador. O <strong>repositório remoto</strong> é uma cópia em um servidor (GitHub, GitLab…) que a equipe usa para trocar commits. O Git só conversa com o remoto quando você pede:</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 760 330" role="img" aria-labelledby="dg-title">
+                        <title id="dg-title">Comandos entre o computador e o GitHub: add e commit acontecem localmente; push envia commits; fetch e pull baixam; clone copia o repositório inteiro.</title>
+                        <defs>
+                            <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-head" style="--c: var(--ink-2)" /></marker>
+                        </defs>
+                        <rect x="10" y="40" width="470" height="270" rx="16" class="dg-box" />
+                        <text x="30" y="30" class="dg-title">Seu computador</text>
+                        <rect x="30" y="80" width="130" height="80" rx="10" class="dg-box strong" />
+                        <text x="95" y="115" text-anchor="middle" class="dg-title" style="font-size:15px">Pasta de</text>
+                        <text x="95" y="135" text-anchor="middle" class="dg-title" style="font-size:15px">trabalho</text>
+                        <rect x="180" y="80" width="130" height="80" rx="10" class="dg-box strong" />
+                        <text x="245" y="125" text-anchor="middle" class="dg-title" style="font-size:15px">Staging</text>
+                        <rect x="330" y="80" width="130" height="80" rx="10" class="dg-box strong" />
+                        <text x="395" y="115" text-anchor="middle" class="dg-title" style="font-size:15px">Repositório</text>
+                        <text x="395" y="135" text-anchor="middle" class="dg-sub">local (.git)</text>
+                        <rect x="560" y="80" width="190" height="80" rx="10" class="dg-box strong" style="stroke: var(--lane-1)" />
+                        <text x="655" y="115" text-anchor="middle" class="dg-title" style="font-size:15px">Repositório</text>
+                        <text x="655" y="135" text-anchor="middle" class="dg-sub">remoto (GitHub)</text>
+                        <text x="655" y="60" text-anchor="middle" class="dg-title">Internet</text>
+
+                        <path d="M160 102 H178" class="dg-arrow" style="--c: var(--lane-2)" marker-end="url(#ah)" />
+                        <text x="169" y="64" text-anchor="middle" class="dg-code" style="--c: var(--lane-2)">add</text>
+                        <path d="M310 102 H328" class="dg-arrow" style="--c: var(--lane-2)" marker-end="url(#ah)" />
+                        <text x="320" y="64" text-anchor="middle" class="dg-code" style="--c: var(--lane-2)">commit</text>
+
+                        <path d="M460 100 H556" class="dg-arrow" style="--c: var(--lane-1)" marker-end="url(#ah)" />
+                        <text x="508" y="92" text-anchor="middle" class="dg-code" style="--c: var(--lane-1)">push</text>
+                        <path d="M560 140 H464" class="dg-arrow" style="--c: var(--lane-4)" marker-end="url(#ah)" />
+                        <text x="512" y="158" text-anchor="middle" class="dg-code" style="--c: var(--lane-4)">fetch</text>
+
+                        <path d="M655 162 V230 H95 V164" class="dg-arrow" style="--c: var(--lane-3)" marker-end="url(#ah)" />
+                        <text x="380" y="222" text-anchor="middle" class="dg-code" style="--c: var(--lane-3)">pull = fetch + merge (atualiza o repositório e a pasta)</text>
+                        <path d="M700 162 V280 H60 V164" class="dg-arrow" style="--c: var(--lane-5)" marker-end="url(#ah)" />
+                        <text x="380" y="272" text-anchor="middle" class="dg-code" style="--c: var(--lane-5)">clone (só na primeira vez: copia tudo)</text>
+                    </svg>
+                    <figcaption><code>add</code> e <code>commit</code> são locais. Só <code>push</code>, <code>fetch</code>, <code>pull</code> e <code>clone</code> usam a internet.</figcaption>
+                </figure>
+                <div class="callout warn">
+                    <p class="callout-title">Salvar, commit e push são coisas diferentes</p>
+                    <p><strong>Salvar</strong> grava o arquivo no disco. <strong>Commit</strong> registra uma versão no histórico do seu computador. <strong>Push</strong> envia seus commits para o GitHub. Se você fez commit e não fez push, seus colegas não veem nada.</p>
+                </div>
+
+                <h2>Por dentro da pasta .git</h2>
+                <p>Quando você roda <code>git init</code>, o Git cria uma pasta oculta <code>.git</code>. <strong>Todo</strong> o histórico mora nela. Vale espiar uma vez para perceber que não há mágica, só arquivos:</p>
+                <pre data-label="terminal (Git Bash, macOS ou Linux)">ls .git
+<span class="o">HEAD  config  description  hooks/  index  info/  objects/  refs/</span>
+
+cat .git/HEAD
+<span class="o">ref: refs/heads/main</span>
+
+cat .git/refs/heads/main
+<span class="o">3f9a2c1d8e7b6a5f4c3d2e1f0a9b8c7d6e5f4a3b</span></pre>
+                <ul>
+                    <li><code>HEAD</code> é um arquivo de texto dizendo em qual branch você está.</li>
+                    <li><code>refs/heads/main</code> é a branch <code>main</code>: um arquivo com o hash de um commit. É literalmente uma etiqueta.</li>
+                    <li><code>objects/</code> guarda o conteúdo, comprimido e nomeado pelo hash. São três tipos: <strong>blob</strong> (conteúdo de um arquivo), <strong>tree</strong> (uma pasta: lista de nomes apontando para blobs e outras trees) e <strong>commit</strong>.</li>
+                    <li><code>index</code> é o staging.</li>
+                </ul>
+                <div class="callout danger">
+                    <p class="callout-title">Não mexa na pasta .git na mão</p>
+                    <p>Apagar a pasta <code>.git</code> apaga todo o histórico local; os arquivos continuam, mas viram uma pasta comum. Também não crie um repositório dentro de outro (um <code>git init</code> dentro de uma pasta que já está num repositório).</p>
+                </div>
+
+                <h2>Resumo</h2>
+                <ul>
+                    <li>Git guarda o histórico de uma pasta; GitHub hospeda esse histórico na internet.</li>
+                    <li>Um commit é uma foto completa do projeto, com autor, mensagem e um ponteiro para o pai.</li>
+                    <li>O hash identifica o commit e muda se qualquer coisa nele mudar.</li>
+                    <li>Arquivos passam pela pasta de trabalho, pelo staging (<code>git add</code>) e entram no repositório (<code>git commit</code>).</li>
+                    <li>Branch é uma etiqueta que aponta para um commit; <code>HEAD</code> diz em qual branch você está.</li>
+                    <li>Só <code>push</code>, <code>pull</code>, <code>fetch</code> e <code>clone</code> conversam com o remoto.</li>
+                </ul>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

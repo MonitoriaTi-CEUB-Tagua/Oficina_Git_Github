@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GitHub, GitLab e outras | Oficina Git & GitHub</title>
+    <meta name="description" content="Compare GitHub, GitLab, Bitbucket, Azure DevOps, Gitea, Forgejo e Codeberg: o que muda, o vocabulário de cada uma e como usar mais de uma ao mesmo tempo.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip theory">Teoria</span> Capítulo 8</p>
+                    <h1>GitHub, GitLab e outras</h1>
+                    <p class="lead">O GitHub é o mais famoso, mas não é o único lugar para hospedar repositórios Git. A boa notícia: o Git é igual em todos.</p>
+                </header>
+
+                <h2>Todas falam Git</h2>
+                <p>Essas plataformas hospedam repositórios Git. Seus commits, branches, merges e todo o fluxo no terminal funcionam do mesmo jeito; <strong>só o endereço do remoto muda</strong>:</p>
+                <pre data-label="mesmo comando, plataformas diferentes">git clone https://github.com/usuario/projeto.git
+git clone https://gitlab.com/usuario/projeto.git
+git clone https://bitbucket.org/usuario/projeto.git
+git clone https://codeberg.org/usuario/projeto.git</pre>
+                <p>O que muda é o que fica <strong>em volta</strong> do Git: a interface do site, como se faz revisão de código, as automações (CI/CD), a gestão de tarefas, os preços e onde o servidor roda.</p>
+
+                <h2>Comparando as principais</h2>
+                <div class="table-wrap wide">
+                    <table>
+                        <thead>
+                            <tr><th>Plataforma</th><th>De quem é</th><th>Destaques</th><th>Automação (CI/CD)</th><th>Instalar no próprio servidor</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>GitHub</strong></td><td>Microsoft</td><td>Maior comunidade e quase todo o open source. Copilot, Codespaces, Pages, Student Pack.</td><td>GitHub Actions</td><td>Só na versão Enterprise Server (paga)</td></tr>
+                            <tr><td><strong>GitLab</strong></td><td>GitLab Inc.</td><td>Plataforma “tudo em um”: código, CI/CD, registro de pacotes, segurança e planejamento. Núcleo de código aberto.</td><td>GitLab CI/CD (<code>.gitlab-ci.yml</code>), muito forte</td><td class="yes">Sim, inclusive a edição gratuita</td></tr>
+                            <tr><td><strong>Bitbucket</strong></td><td>Atlassian</td><td>Integração nativa com Jira, Confluence e Trello. Comum em empresas que já usam Atlassian.</td><td>Bitbucket Pipelines</td><td>Data Center (pago; a Atlassian anunciou o fim dessa linha)</td></tr>
+                            <tr><td><strong>Azure DevOps</strong> (Azure Repos)</td><td>Microsoft</td><td>Voltado a empresas: Boards, Pipelines, Test Plans e integração com a nuvem Azure.</td><td>Azure Pipelines</td><td>Azure DevOps Server (pago)</td></tr>
+                            <tr><td><strong>Gitea / Forgejo</strong></td><td>Comunidade (código aberto)</td><td>Leves: rodam até num Raspberry Pi. Interface parecida com a do GitHub.</td><td>Gitea Actions / Forgejo Actions (compatíveis com Actions)</td><td class="yes">Sim, é o objetivo principal</td></tr>
+                            <tr><td><strong>Codeberg</strong></td><td>Associação sem fins lucrativos (Alemanha)</td><td>Hospedagem gratuita para projetos de código aberto, baseada no Forgejo.</td><td>Woodpecker CI / Forgejo Actions</td><td>Não se aplica (use Forgejo)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Planos e limites gratuitos mudam com frequência; confira na página de preços de cada uma antes de escolher.</p>
+
+                <h2>Mesmo conceito, nomes diferentes</h2>
+                <p>Ao trocar de plataforma, o que mais confunde é o vocabulário:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Conceito</th><th>GitHub</th><th>GitLab</th><th>Bitbucket</th><th>Azure DevOps</th></tr></thead>
+                        <tbody>
+                            <tr><td>Pedido para juntar uma branch</td><td>Pull Request</td><td><strong>Merge Request</strong></td><td>Pull Request</td><td>Pull Request</td></tr>
+                            <tr><td>Agrupar repositórios e pessoas</td><td>Organization</td><td>Group</td><td>Workspace / Project</td><td>Organization / Project</td></tr>
+                            <tr><td>Tarefas e bugs</td><td>Issues</td><td>Issues</td><td>Jira (integrado)</td><td>Work Items (Boards)</td></tr>
+                            <tr><td>Automação</td><td>Actions (workflows)</td><td>Pipelines</td><td>Pipelines</td><td>Pipelines</td></tr>
+                            <tr><td>Site estático</td><td>Pages</td><td>Pages</td><td>Sites em <code>usuario.bitbucket.io</code></td><td>Static Web Apps (Azure)</td></tr>
+                            <tr><td>Cópia de um repositório na sua conta</td><td>Fork</td><td>Fork</td><td>Fork</td><td>Fork</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Qual escolher?</h2>
+                <dl class="term-list">
+                    <dt>Estudando e montando portfólio</dt>
+                    <dd><strong>GitHub.</strong> É onde recrutadores olham, onde estão os projetos open source e onde o Student Pack dá benefícios.</dd>
+                    <dt>Trabalho da faculdade em grupo</dt>
+                    <dd>A que o professor pedir. Se for livre, GitHub, porque todos provavelmente já têm conta.</dd>
+                    <dt>Empresa que já usa Jira</dt>
+                    <dd>Bitbucket costuma vir junto. GitHub e GitLab também se integram ao Jira.</dd>
+                    <dt>Precisa do código no próprio servidor</dt>
+                    <dd>GitLab (Community Edition) ou Gitea/Forgejo, mais leves.</dd>
+                    <dt>Prefere uma opção sem fins lucrativos</dt>
+                    <dd>Codeberg, para projetos de código aberto.</dd>
+                </dl>
+
+                <h2>Usando mais de uma ao mesmo tempo</h2>
+                <p>Como um repositório pode ter vários remotos, nada impede de manter o projeto no GitHub e no GitLab, por exemplo, como backup ou para usar o CI de um com o código do outro.</p>
+                <pre data-label="terminal"># o origin já aponta para o GitHub; adicione outro remoto
+git remote add gitlab https://gitlab.com/voce/projeto.git
+git remote -v
+
+# envie para cada um
+git push origin main
+git push gitlab main
+
+# baixar de um remoto específico
+git fetch gitlab</pre>
+                <p>O Git trata cada remoto separadamente: haverá <code>origin/main</code> e <code>gitlab/main</code>, cada um com sua última posição conhecida.</p>
+                <div class="callout tip">
+                    <p class="callout-title">Migrando de plataforma</p>
+                    <p>Todas oferecem um importador (<em>Import repository</em> ou <em>New project → Import</em>) que traz o histórico completo e, em muitos casos, issues e pull requests. Só com o Git também dá: <code>git clone --mirror</code> do antigo e <code>git push --mirror</code> para o novo.</p>
+                </div>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

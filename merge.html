@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Merge, rebase e conflitos | Oficina Git & GitHub</title>
+    <meta name="description" content="Fast-forward, merge de três vias, rebase, squash e cherry-pick com grafos interativos, e como resolver conflitos no terminal e no VS Code.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip practice">Prática</span> <span class="chip theory">Teoria</span> Capítulo 5</p>
+                    <h1>Merge, rebase e conflitos</h1>
+                    <p class="lead">Branches separam o trabalho; merge e rebase juntam de novo. Entenda as formas de juntar e perca o medo de conflito.</p>
+                </header>
+
+                <h2>A regra de ouro do merge</h2>
+                <p>O <code>git merge X</code> traz as mudanças da branch <code>X</code> <strong>para a branch em que você está</strong>. Então primeiro você vai para quem vai receber, depois chama quem vai entrar:</p>
+                <pre data-label="terminal"># quero levar a feature para a main:
+git switch main          # 1. vá para quem RECEBE
+git merge feature/login  # 2. chame quem ENTRA</pre>
+                <p>Dependendo de como as branches andaram, o Git junta de um jeito ou de outro.</p>
+
+                <h2>Fast-forward: só avançar a etiqueta</h2>
+                <p>Se a <code>main</code> não mudou desde que a branch foi criada, não há nada para combinar. O Git só empurra a etiqueta <code>main</code> para frente.</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git switch -c feature
+                        = git commit -m "menu"
+                        = git commit -m "estilo"
+                        = git switch main
+                        > A `feature` tem dois commits a mais. A `main` continua em `A`: ela não andou.
+                        $ git merge feature
+                        > **Fast-forward**: a `main` só avançou até `C`. Nenhum commit novo foi criado, porque o histórico já estava em linha reta.
+                        $ git branch -d feature
+                        > Depois do merge, a branch pode ser apagada: os commits continuam na `main`.
+                    </script>
+                    <figcaption>Fast-forward: a etiqueta anda, o histórico fica reto.</figcaption>
+                </figure>
+
+                <h2>Merge de três vias: quando as duas andaram</h2>
+                <p>Se a <code>main</code> também recebeu commits, o histórico se dividiu. O Git compara três versões: o ancestral comum (onde as branches se separaram) e as duas pontas. Então cria um <strong>commit de merge</strong>, que tem dois pais.</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git switch -c feature
+                        = git commit -m "menu"
+                        = git commit -m "estilo"
+                        = git switch main
+                        = git commit -m "corrige"
+                        > As duas branches andaram depois de `A`. `A` é o **ancestral comum**.
+                        $ git merge feature
+                        > O Git combinou as mudanças das duas pontas e criou `E`, um commit com dois pais (`D` e `C`). A bolinha vazada indica merge.
+                    </script>
+                    <figcaption>O commit de merge registra o momento em que os caminhos se juntaram.</figcaption>
+                </figure>
+                <p>Quer o commit de merge mesmo quando daria fast-forward (para deixar visível que existiu uma branch)? Use <code>git merge --no-ff feature</code>. É o que o botão de merge do GitHub faz por padrão.</p>
+
+                <h2>Rebase: refazer a branch em cima da outra</h2>
+                <p>O rebase é outra forma de trazer as novidades da <code>main</code>. Em vez de criar um commit de merge, ele <strong>copia</strong> os seus commits para depois do último commit da <code>main</code>, como se você tivesse começado a branch agora.</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git switch -c feature
+                        = git commit -m "menu"
+                        = git commit -m "estilo"
+                        = git switch main
+                        = git commit -m "corrige"
+                        = git switch feature
+                        > Mesmo ponto de partida do exemplo anterior, mas agora você está na `feature`.
+                        $ git rebase main
+                        > O Git copiou `B` e `C` para depois de `D`, criando `B'` e `C'` (hashes novos). Os originais ficaram sem etiqueta (apagados).
+                        $ git switch main
+                        + git merge feature
+                        > Agora o merge é um fast-forward e o histórico da `main` fica numa linha reta, sem commit de merge.
+                    </script>
+                    <figcaption>Rebase: histórico linear, mas os commits são recriados.</figcaption>
+                </figure>
+                <div class="callout danger">
+                    <p class="callout-title">Nunca faça rebase de commits que outras pessoas já têm</p>
+                    <p>Como o rebase cria commits novos, quem já baixou os antigos fica com um histórico diferente do seu. Use rebase só em commits que estão apenas no seu computador ou na sua branch pessoal. Na dúvida, use merge.</p>
+                </div>
+
+                <h2>Merge, rebase ou squash?</h2>
+                <p>No GitHub, ao integrar um pull request, você escolhe entre três botões:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Opção</th><th>O que acontece</th><th>Quando usar</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Create a merge commit</strong></td><td>Mantém todos os commits da branch e cria um commit de merge.</td><td>Padrão seguro. Mostra quando cada branch entrou.</td></tr>
+                            <tr><td><strong>Squash and merge</strong></td><td>Junta todos os commits da branch em <em>um</em> commit novo na <code>main</code>.</td><td>Branches com muitos commits do tipo “ajuste”, “agora vai”.</td></tr>
+                            <tr><td><strong>Rebase and merge</strong></td><td>Copia os commits da branch para a ponta da <code>main</code>, sem commit de merge.</td><td>Equipes que preferem histórico linear.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git switch -c feature
+                        = git commit -m "menu"
+                        = git commit -m "ajuste"
+                        = git commit -m "agora vai"
+                        = git switch main
+                        > A `feature` tem três commits, dois deles pouco úteis no histórico.
+                        $ git merge --squash feature -m "adiciona menu"
+                        > **Squash**: as mudanças dos três commits viraram um só (`E`) na `main`. A `feature` não fica ligada ao histórico da `main`, por isso deve ser apagada com `git branch -D feature`.
+                    </script>
+                    <figcaption>Squash: um commit limpo por funcionalidade.</figcaption>
+                </figure>
+
+                <h2>Conflitos: quando o Git precisa da sua decisão</h2>
+                <p>O Git junta sozinho mudanças em arquivos diferentes, ou em partes diferentes do mesmo arquivo. O <strong>conflito</strong> acontece quando as duas branches mudaram <strong>as mesmas linhas</strong> de jeitos diferentes. O Git não tem como saber qual está certa, então para e pergunta.</p>
+                <div class="callout tip">
+                    <p class="callout-title">Conflito não é erro</p>
+                    <p>Não quebrou nada e nada foi perdido. É o Git pedindo para você escolher. Respire e siga os passos.</p>
+                </div>
+                <h3>Como o conflito aparece</h3>
+                <pre data-label="terminal">git merge feature/titulo
+<span class="e">Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.</span></pre>
+                <p>Dentro do arquivo, o Git marca o trecho com as duas versões:</p>
+                <pre data-label="index.html (em conflito)" data-nocopy data-raw><span class="k">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span>
+&lt;h1&gt;Bem-vindo à loja&lt;/h1&gt;
+<span class="k">=======</span>
+&lt;h1&gt;Loja do Campus&lt;/h1&gt;
+<span class="k">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/titulo</span></pre>
+                <dl class="term-list">
+                    <dt><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code></dt>
+                    <dd>Começa a sua versão (a da branch em que você está).</dd>
+                    <dt><code>=======</code></dt>
+                    <dd>Divide as duas versões.</dd>
+                    <dt><code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/titulo</code></dt>
+                    <dd>Termina a versão que está chegando.</dd>
+                </dl>
+
+                <h3>Resolvendo passo a passo</h3>
+                <ol class="steps">
+                    <li><strong>Veja quais arquivos estão em conflito</strong>
+                        <pre data-label="terminal">git status
+<span class="o">Unmerged paths:
+        both modified:   index.html</span></pre>
+                    </li>
+                    <li><strong>Edite o arquivo e deixe só a versão final</strong>
+                        <p>Pode ser uma das duas, uma mistura ou algo novo. Apague as três linhas de marcação.</p>
+                        <pre data-label="index.html (resolvido)" data-nocopy data-raw>&lt;h1&gt;Bem-vindo à Loja do Campus&lt;/h1&gt;</pre>
+                    </li>
+                    <li><strong>Teste</strong>. Abra o site, rode o programa: o resultado precisa funcionar, não só compilar.</li>
+                    <li><strong>Marque como resolvido e conclua o merge</strong>
+                        <pre data-label="terminal">git add index.html
+git commit
+<span class="o"># o Git já sugere a mensagem "Merge branch 'feature/titulo'"</span></pre>
+                    </li>
+                </ol>
+                <p>Mudou de ideia no meio? <code>git merge --abort</code> desfaz a tentativa e volta tudo ao estado anterior. No rebase, o equivalente é <code>git rebase --abort</code>; para seguir depois de resolver, <code>git add</code> e <code>git rebase --continue</code>.</p>
+
+                <h3>No VS Code é mais fácil</h3>
+                <p>O VS Code destaca os conflitos com cores e mostra botões acima de cada um:</p>
+                <ul>
+                    <li><strong>Accept Current Change</strong>: fica com a sua versão (<code>HEAD</code>).</li>
+                    <li><strong>Accept Incoming Change</strong>: fica com a versão que está chegando.</li>
+                    <li><strong>Accept Both Changes</strong>: mantém as duas, uma depois da outra.</li>
+                    <li><strong>Compare Changes</strong>: mostra lado a lado.</li>
+                </ul>
+                <p>Para casos maiores, clique em <strong>Resolve in Merge Editor</strong>: ele abre três painéis (sua versão, a que chega e o resultado). Depois de resolver, salve, clique em <strong>+</strong> no arquivo (o <code>git add</code>) e faça o commit pelo painel de Source Control.</p>
+
+                <h3>Como ter menos conflitos</h3>
+                <ul>
+                    <li>Atualize sua branch com frequência (<code>git pull</code> na <code>main</code> e merge dela na sua branch).</li>
+                    <li>Branches curtas: quanto mais tempo separada, mais diferente fica.</li>
+                    <li>Combine com a equipe quem mexe em qual arquivo.</li>
+                    <li>Use o mesmo formatador de código (Prettier, Black…) para evitar conflitos de espaços e aspas.</li>
+                </ul>
+
+                <h2>Cherry-pick: pegar só um commit</h2>
+                <p>Às vezes você quer só uma correção específica de outra branch, sem trazer o resto. O <code>cherry-pick</code> copia um commit para onde você está.</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git switch -c feature
+                        = git commit -m "tela nova"
+                        = git commit -m "corrige bug"
+                        = git commit -m "mais tela"
+                        = git switch main
+                        > A correção do bug (`C`) está no meio da `feature`, que ainda não está pronta. A `main` precisa da correção agora.
+                        $ git cherry-pick C
+                        > `C'` é uma cópia de `C` aplicada na `main`. O resto da `feature` ficou de fora.
+                    </script>
+                    <figcaption>Cherry-pick copia um commit específico.</figcaption>
+                </figure>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

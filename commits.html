@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Commits: salvando versões | Oficina Git & GitHub</title>
+    <meta name="description" content="Crie um repositório, entenda git status, git add e git commit, escreva boas mensagens, use .gitignore e desfaça erros locais.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip practice">Prática</span> Capítulo 3</p>
+                    <h1>Commits: salvando versões</h1>
+                    <p class="lead">O ciclo que você vai repetir centenas de vezes: editar, escolher o que entra, registrar. Aqui você cria seu primeiro repositório do zero.</p>
+                </header>
+
+                <h2>O ciclo básico</h2>
+                <ol class="steps">
+                    <li><strong>Edite</strong> os arquivos no editor e salve.</li>
+                    <li><strong>Confira</strong> o que mudou com <code>git status</code> e <code>git diff</code>.</li>
+                    <li><strong>Escolha</strong> o que vai para o commit com <code>git add</code>.</li>
+                    <li><strong>Registre</strong> com <code>git commit -m "mensagem"</code>.</li>
+                </ol>
+
+                <h2>Mão na massa: seu primeiro repositório</h2>
+                <p>Abra o terminal (Git Bash no Windows) e siga junto. Os textos em cinza são o que o Git responde.</p>
+                <ol class="steps">
+                    <li>
+                        <strong>Crie a pasta do projeto e transforme em repositório</strong>
+                        <pre data-label="terminal">mkdir meu-site
+cd meu-site
+git init
+<span class="o">Initialized empty Git repository in .../meu-site/.git/</span></pre>
+                    </li>
+                    <li>
+                        <strong>Crie um arquivo</strong>
+                        <p>Abra a pasta no VS Code (<code>code .</code>), crie um <code>index.html</code> com qualquer conteúdo e salve. Ou pelo terminal:</p>
+                        <pre data-label="terminal">echo "&lt;h1&gt;Meu site&lt;/h1&gt;" &gt; index.html</pre>
+                    </li>
+                    <li>
+                        <strong>Pergunte ao Git o que ele vê</strong>
+                        <pre data-label="terminal">git status
+<span class="o">On branch main
+No commits yet
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+        index.html</span></pre>
+                        <p>O arquivo é <em>untracked</em>: o Git sabe que ele existe, mas ainda não acompanha.</p>
+                    </li>
+                    <li>
+                        <strong>Coloque no stage</strong>
+                        <pre data-label="terminal">git add index.html
+git status
+<span class="o">Changes to be committed:
+        new file:   index.html</span></pre>
+                    </li>
+                    <li>
+                        <strong>Faça o commit</strong>
+                        <pre data-label="terminal">git commit -m "cria página inicial"
+<span class="o">[main (root-commit) 4e1b7a2] cria página inicial
+ 1 file changed, 1 insertion(+)
+ create mode 100644 index.html</span></pre>
+                    </li>
+                    <li>
+                        <strong>Mude algo e repita</strong>
+                        <p>Edite o <code>index.html</code>, crie um <code>style.css</code> e faça mais um commit. Depois veja o histórico:</p>
+                        <pre data-label="terminal">git add .
+git commit -m "adiciona estilo"
+git log --oneline
+<span class="o">9c3d0f1 (HEAD -> main) adiciona estilo
+4e1b7a2 cria página inicial</span></pre>
+                    </li>
+                </ol>
+                <p>Veja o que aconteceu no grafo a cada commit:</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        > Depois do `git init` não existe nenhum commit. A branch `main` ainda não aponta para nada.
+                        $ git commit -m "cria página"
+                        > O primeiro commit, `A`. Ele não tem pai. A `main` passa a apontar para ele.
+                        $ git commit -m "estilo"
+                        > O commit `B` aponta para `A`. A etiqueta `main` (com o `HEAD`) avançou sozinha.
+                        $ git commit -m "contato"
+                        > Cada commit novo vai para a ponta da branch em que o `HEAD` está.
+                    </script>
+                    <figcaption>Um histórico linear: o caso mais simples.</figcaption>
+                </figure>
+
+                <h2>Lendo o git status</h2>
+                <p>O <code>git status</code> é o comando mais útil para quem está começando: rode sempre que estiver em dúvida. Ele ainda sugere o próximo comando.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Se aparecer</th><th>Significa</th><th>Próximo passo</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>Untracked files</code></td><td>Arquivos novos, nunca adicionados.</td><td><code>git add arquivo</code></td></tr>
+                            <tr><td><code>Changes not staged for commit</code></td><td>Arquivos conhecidos que mudaram.</td><td><code>git add arquivo</code> ou <code>git restore arquivo</code> para descartar</td></tr>
+                            <tr><td><code>Changes to be committed</code></td><td>Mudanças prontas no stage.</td><td><code>git commit -m "..."</code></td></tr>
+                            <tr><td><code>nothing to commit, working tree clean</code></td><td>Tudo igual ao último commit.</td><td>Trabalhar ou enviar com <code>git push</code></td></tr>
+                            <tr><td><code>Your branch is ahead of 'origin/main' by 2 commits</code></td><td>Você tem commits que o GitHub não tem.</td><td><code>git push</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Formas de usar o git add</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Comando</th><th>O que coloca no stage</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>git add index.html</code></td><td>Só esse arquivo.</td></tr>
+                            <tr><td><code>git add css/</code></td><td>Tudo dentro da pasta.</td></tr>
+                            <tr><td><code>git add .</code></td><td>Tudo o que mudou na pasta atual e subpastas, inclusive arquivos novos.</td></tr>
+                            <tr><td><code>git add -p</code></td><td>Pergunta trecho por trecho se você quer incluir. Ótimo para separar mudanças em commits diferentes.</td></tr>
+                            <tr><td><code>git commit -am "msg"</code></td><td>Atalho: adiciona arquivos <em>já rastreados</em> e faz o commit. Arquivos novos ficam de fora.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout warn">
+                    <p class="callout-title">Cuidado com o git add .</p>
+                    <p>Ele adiciona tudo, inclusive o que não deveria (senhas, arquivos gigantes, pastas de dependências). Rode <code>git status</code> antes e mantenha um <a href="#gitignore">.gitignore</a> no projeto.</p>
+                </div>
+
+                <h2>Vendo o histórico e as diferenças</h2>
+                <pre data-label="terminal"># histórico resumido, uma linha por commit
+git log --oneline
+
+# histórico desenhado como grafo, com todas as branches
+git log --oneline --graph --all
+
+# o que mudou num commit específico
+git show 9c3d0f1
+
+# o que mudou na pasta e ainda não está no stage
+git diff
+
+# o que está no stage e vai entrar no próximo commit
+git diff --staged</pre>
+                <p>Para sair de telas longas (como a do <code>git log</code>), aperte <kbd>q</kbd>.</p>
+
+                <h2>Boas mensagens de commit</h2>
+                <p>A mensagem é para a pessoa que vai ler o histórico daqui a seis meses (provavelmente você). Regras simples:</p>
+                <ul>
+                    <li>Diga <strong>o que</strong> mudou de forma específica: “corrige cálculo do frete”, não “ajustes”.</li>
+                    <li>Comece com um verbo no presente: <em>adiciona</em>, <em>corrige</em>, <em>remove</em>, <em>atualiza</em>.</li>
+                    <li>Primeira linha curta, até uns 50 caracteres. Se precisar explicar o porquê, rode <code>git commit</code> sem <code>-m</code> e escreva um parágrafo depois de uma linha em branco.</li>
+                </ul>
+                <div class="grid-2">
+                    <div class="panel">
+                        <h4>Evite</h4>
+                        <pre data-label="mensagens vagas" data-nocopy data-theme="light">update
+ajustes
+agora vai
+asdfgh
+mudanças no código</pre>
+                    </div>
+                    <div class="panel">
+                        <h4>Prefira</h4>
+                        <pre data-label="mensagens claras" data-nocopy data-theme="light">adiciona formulário de contato
+corrige menu cortado no celular
+remove dependência não usada
+atualiza instruções do README</pre>
+                    </div>
+                </div>
+                <h3>Conventional Commits</h3>
+                <p>Muitas equipes usam um prefixo que indica o tipo da mudança. Não é obrigatório, mas deixa o histórico fácil de ler:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Prefixo</th><th>Quando usar</th><th>Exemplo</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>feat:</code></td><td>Funcionalidade nova</td><td><code>feat: adiciona busca de produtos</code></td></tr>
+                            <tr><td><code>fix:</code></td><td>Correção de bug</td><td><code>fix: corrige login com e-mail maiúsculo</code></td></tr>
+                            <tr><td><code>docs:</code></td><td>Só documentação</td><td><code>docs: explica como rodar o projeto</code></td></tr>
+                            <tr><td><code>style:</code></td><td>Formatação, sem mudar comportamento</td><td><code>style: aplica formatador</code></td></tr>
+                            <tr><td><code>refactor:</code></td><td>Reorganiza código sem mudar o que ele faz</td><td><code>refactor: separa validação em função</code></td></tr>
+                            <tr><td><code>test:</code></td><td>Testes</td><td><code>test: cobre cálculo de desconto</code></td></tr>
+                            <tr><td><code>chore:</code></td><td>Manutenção (configs, dependências)</td><td><code>chore: atualiza dependências</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Qual o tamanho certo de um commit?</h2>
+                <p><strong>Uma mudança lógica por commit.</strong> Se a mensagem precisa de um “e” (“adiciona login <em>e</em> muda cor do rodapé”), provavelmente são dois commits. Commits pequenos são fáceis de revisar, de entender e de desfazer sem levar junto o que estava certo.</p>
+                <p>E faça commits com frequência. Terminou uma parte que funciona? Commit. Ele é seu ponto de salvamento.</p>
+
+                <h2>.gitignore: o que não deve ir para o histórico</h2>
+                <p>Crie um arquivo chamado <code>.gitignore</code> na raiz do projeto. Cada linha é um padrão de arquivo ou pasta que o Git deve fingir que não existe.</p>
+                <pre data-label=".gitignore"># dependências (são reinstaladas com npm install / pip install)
+node_modules/
+.venv/
+venv/
+
+# segredos: NUNCA versione
+.env
+*.key
+
+# arquivos gerados
+dist/
+build/
+__pycache__/
+*.log
+
+# lixo do sistema e de editores
+.DS_Store
+Thumbs.db
+.idea/</pre>
+                <ul>
+                    <li>O GitHub tem <a href="https://github.com/github/gitignore" target="_blank" rel="noopener noreferrer">modelos prontos</a> para cada linguagem, e oferece um deles ao criar um repositório.</li>
+                    <li>O <code>.gitignore</code> só vale para arquivos <strong>ainda não rastreados</strong>. Se um arquivo já entrou num commit, veja <a href="problemas.html#gitignore-nao-funciona">como tirar</a>.</li>
+                    <li>O próprio <code>.gitignore</code> deve ser versionado, para valer para toda a equipe.</li>
+                </ul>
+
+                <h2>Desfazendo coisas antes do push</h2>
+                <p>Enquanto os commits estão só no seu computador, dá para corrigir quase tudo com segurança:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Situação</th><th>Comando</th></tr></thead>
+                        <tbody>
+                            <tr><td>Quero descartar o que mudei num arquivo (voltar ao último commit)</td><td><code>git restore index.html</code></td></tr>
+                            <tr><td>Coloquei no stage sem querer</td><td><code>git restore --staged index.html</code></td></tr>
+                            <tr><td>Errei a mensagem do último commit</td><td><code>git commit --amend -m "mensagem certa"</code></td></tr>
+                            <tr><td>Esqueci um arquivo no último commit</td><td><code>git add arquivo</code> e <code>git commit --amend --no-edit</code></td></tr>
+                            <tr><td>Quero desfazer o último commit, mantendo as alterações</td><td><code>git reset --soft HEAD~1</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Repare no que o <code>--amend</code> faz de verdade: ele não edita o commit, cria um <strong>novo</strong> e abandona o antigo.</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git commit -m "contato"
+                        > O commit `B` tem um erro de digitação na mensagem.
+                        $ git commit --amend -m "contato"
+                        > O Git criou `B'` com a mensagem certa e moveu a `main` para ele. O `B` original ficou apagado, sem nenhuma etiqueta. Por isso nunca use `--amend` num commit que já foi enviado com `git push`.
+                    </script>
+                    <figcaption>Commits nunca são alterados: são substituídos por cópias com hash novo.</figcaption>
+                </figure>
+                <p>Para mais casos (commit já enviado, arquivo apagado, commit na branch errada), consulte <a href="problemas.html#desfazer">Problemas e soluções</a>.</p>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Laboratório interativo | Oficina Git & GitHub</title>
+    <meta name="description" content="Terminal Git simulado com grafo ao vivo e desafios: branches, merge, rebase, push rejeitado, revert e commit na branch errada. Mais um exercício real em dupla no GitHub.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip practice">Prática</span> Capítulo 11</p>
+                    <h1>Laboratório interativo</h1>
+                    <p class="lead">Um terminal de mentira com um grafo de verdade. Digite comandos Git e veja o histórico mudar na hora. Nada aqui afeta o seu computador, então erre à vontade.</p>
+                </header>
+
+                <h2>Terminal</h2>
+                <p>Digite <code>help</code> para ver os comandos. Use <kbd>↑</kbd> para repetir comandos e <code>reset</code> para recomeçar. Para simular um colega enviando algo ao GitHub, use <code>colega commit -m "..."</code>.</p>
+                <div class="lab" data-setup='git commit -m "início"'>
+                    <div class="lab-graph" tabindex="0" aria-label="Grafo do repositório simulado"></div>
+                    <div class="lab-term">
+                        <div class="lab-log" role="log" aria-live="polite"></div>
+                        <form class="lab-form">
+                            <label class="lab-prompt" for="lab-input">(main) $</label>
+                            <input class="lab-input" id="lab-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="git commit -m &quot;minha mudança&quot;">
+                        </form>
+                    </div>
+                    <div class="lab-quick" aria-label="Comandos prontos (clique para preencher)">
+                        <button type="button" data-lab-cmd='git commit -m "mudança"'>commit</button>
+                        <button type="button" data-lab-cmd="git switch -c feature">switch -c feature</button>
+                        <button type="button" data-lab-cmd="git switch main">switch main</button>
+                        <button type="button" data-lab-cmd="git merge feature">merge feature</button>
+                        <button type="button" data-lab-cmd="git rebase main">rebase main</button>
+                        <button type="button" data-lab-cmd="git push -u origin main">push -u</button>
+                        <button type="button" data-lab-cmd='colega commit -m "do colega"'>colega commit</button>
+                        <button type="button" data-lab-cmd="git pull">pull</button>
+                        <button type="button" data-lab-cmd="git log">log</button>
+                        <button type="button" data-lab-cmd="git status">status</button>
+                    </div>
+                </div>
+
+                <h2>Desafios</h2>
+                <p>Clique em <strong>Carregar</strong> para preparar o repositório de cada desafio. Quando o objetivo for cumprido, ele é marcado como concluído (fica salvo neste navegador).</p>
+                <ol class="challenges"></ol>
+
+                <h2>Prática real em dupla</h2>
+                <p>Agora com o GitHub de verdade. Façam em dupla, cada pessoa no seu computador. Vamos chamar de <strong>Pessoa A</strong> e <strong>Pessoa B</strong>.</p>
+                <ol class="steps">
+                    <li><strong>A cria o repositório</strong>
+                        <p>No GitHub: <em>New repository</em> → nome <code>pratica-git</code> → marque <em>Add a README</em> → <em>Create</em>. Depois, em <em>Settings → Collaborators</em>, convide a Pessoa B.</p>
+                    </li>
+                    <li><strong>B aceita o convite e as duas pessoas clonam</strong>
+                        <pre data-label="terminal (A e B)">git clone https://github.com/PESSOA-A/pratica-git.git
+cd pratica-git</pre>
+                    </li>
+                    <li><strong>Cada pessoa cria a sua branch e um arquivo</strong>
+                        <pre data-label="terminal (A usa o próprio nome)">git switch -c feature/ana
+echo "Oi, eu sou a Ana" &gt; ana.txt
+git add ana.txt
+git commit -m "adiciona apresentação da Ana"
+git push -u origin feature/ana</pre>
+                    </li>
+                    <li><strong>Pull request cruzado</strong>
+                        <p>Cada pessoa abre um PR da sua branch para a <code>main</code> e pede revisão da outra. Revise, deixe um comentário, aprove e faça o merge.</p>
+                    </li>
+                    <li><strong>Atualizem a main</strong>
+                        <pre data-label="terminal (A e B)">git switch main
+git pull
+ls   # os dois arquivos devem aparecer</pre>
+                    </li>
+                    <li><strong>Agora, um conflito de propósito</strong>
+                        <p>As duas pessoas criam uma branch nova e editam a <strong>mesma linha</strong> do <code>README.md</code> com textos diferentes. Commit, push e PR. O primeiro PR entra sem problema; o segundo vai acusar conflito.</p>
+                    </li>
+                    <li><strong>Resolva o conflito</strong>
+                        <pre data-label="terminal (quem ficou com o conflito)">git switch main
+git pull
+git switch minha-branch
+git merge main
+# resolva o README.md no VS Code, depois:
+git add README.md
+git commit
+git push</pre>
+                        <p>O PR se atualiza e pode ser integrado. Parabéns: esse é o ciclo completo de colaboração.</p>
+                    </li>
+                </ol>
+
+                <h2>Para continuar treinando</h2>
+                <ul>
+                    <li><a href="https://learngitbranching.js.org/?locale=pt_BR" target="_blank" rel="noopener noreferrer">Learn Git Branching</a>: dezenas de fases sobre branches e rebase, em português.</li>
+                    <li><a href="https://skills.github.com/" target="_blank" rel="noopener noreferrer">GitHub Skills</a>: cursos práticos dentro do próprio GitHub.</li>
+                    <li><a href="https://ohmygit.org/" target="_blank" rel="noopener noreferrer">Oh My Git!</a>: um jogo de cartas para aprender Git.</li>
+                    <li><a href="https://git-scm.com/book/pt-br/v2" target="_blank" rel="noopener noreferrer">Pro Git</a>: o livro oficial, gratuito e em português.</li>
+                </ul>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

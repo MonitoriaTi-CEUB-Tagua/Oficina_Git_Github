@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Remotos: push, pull e fetch | Oficina Git & GitHub</title>
+    <meta name="description" content="Conecte seu repositório ao GitHub, entenda origin e origin/main, a diferença entre fetch e pull, e o que fazer quando o push é rejeitado.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip practice">Prática</span> Capítulo 6</p>
+                    <h1>Remotos: push, pull e fetch</h1>
+                    <p class="lead">Até aqui, tudo ficou no seu computador. Agora você vai conectar o repositório ao GitHub e trocar commits com outras pessoas.</p>
+                </header>
+
+                <h2>O que é um remoto</h2>
+                <p>Um <strong>remoto</strong> é um endereço de outra cópia do repositório, normalmente no GitHub. Por convenção, o principal se chama <code>origin</code>.</p>
+                <pre data-label="terminal">git remote -v
+<span class="o">origin  https://github.com/voce/meu-site.git (fetch)
+origin  https://github.com/voce/meu-site.git (push)</span></pre>
+                <p>O Git também guarda a <strong>última posição conhecida</strong> de cada branch do remoto: <code>origin/main</code>, <code>origin/feature</code>… Nos grafos, ela aparece como uma etiqueta tracejada. Ela só se atualiza quando você conversa com o GitHub (<code>fetch</code>, <code>pull</code> ou <code>push</code>).</p>
+
+                <h2>Dois jeitos de começar</h2>
+                <div class="tabs">
+                    <div class="tab-panel" data-tab="O projeto já está no GitHub">
+                        <p>Use o <strong>clone</strong>: ele baixa o histórico inteiro e já configura o <code>origin</code>. No GitHub, clique no botão verde <strong>Code</strong> e copie o endereço.</p>
+                        <pre data-label="terminal">git clone https://github.com/usuario/projeto.git
+cd projeto</pre>
+                        <p>O clone cria uma pasta com o nome do repositório. Não rode <code>git init</code> depois: o clone já é um repositório.</p>
+                    </div>
+                    <div class="tab-panel" data-tab="O projeto está só no meu computador">
+                        <ol>
+                            <li>No GitHub, clique em <strong>New repository</strong>. Dê um nome e <strong>não</strong> marque README, .gitignore nem licença (o repositório precisa nascer vazio).</li>
+                            <li>No terminal, dentro da pasta do projeto (que já tem commits):</li>
+                        </ol>
+                        <pre data-label="terminal">git remote add origin https://github.com/voce/meu-site.git
+git branch -M main
+git push -u origin main</pre>
+                        <p>O <code>git branch -M main</code> garante que a branch se chama <code>main</code> (projetos antigos podem usar <code>master</code>).</p>
+                    </div>
+                </div>
+
+                <h2>push: enviar seus commits</h2>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git remote add origin https://github.com/voce/meu-site.git
+                        > O repositório local tem um commit e o remoto já foi configurado, mas nada foi enviado.
+                        $ git push -u origin main
+                        > O primeiro push envia a `main` e, com `-u`, liga a sua `main` à `origin/main` (o **upstream**). O ☁ indica que as duas estão iguais.
+                        $ git commit -m "menu"
+                        + git commit -m "rodapé"
+                        > Dois commits novos. A `main` avançou, mas a `origin/main` ficou em `A`: o GitHub ainda não sabe deles.
+                        $ git status
+                        > O `git status` avisa que você está **à frente** do GitHub.
+                        $ git push
+                        > Como o upstream já está configurado, basta `git push`. A `origin/main` alcançou a `main`.
+                    </script>
+                    <figcaption>O <code>-u</code> só é necessário no primeiro push de cada branch.</figcaption>
+                </figure>
+
+                <h2>fetch e pull: receber o que os outros enviaram</h2>
+                <dl class="term-list">
+                    <dt><code>git fetch</code></dt>
+                    <dd><strong>Só baixa</strong> os commits novos e atualiza as etiquetas <code>origin/…</code>. Sua branch e seus arquivos não mudam. É seguro rodar a qualquer momento.</dd>
+                    <dt><code>git pull</code></dt>
+                    <dd><strong>Baixa e junta</strong>: é um <code>git fetch</code> seguido de um <code>git merge origin/main</code> (ou rebase, se configurado). Muda seus arquivos.</dd>
+                </dl>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git push -u origin main
+                        > Você e o GitHub estão iguais.
+                        $ colega commit -m "rodapé"
+                        > Um colega enviou o commit `B`. Ele está no GitHub (tracejado), mas o seu computador ainda nem sabe que ele existe.
+                        $ git fetch
+                        > O `fetch` baixou `B` e moveu a `origin/main`. Sua `main` continua em `A` e seus arquivos não mudaram.
+                        $ git status
+                        > Agora o Git sabe que você está **atrás** do GitHub.
+                        $ git merge origin/main
+                        > Juntou (aqui foi um fast-forward). `fetch` + `merge` é exatamente o que o `git pull` faz de uma vez.
+                    </script>
+                    <figcaption>fetch olha, pull traz para a sua branch.</figcaption>
+                </figure>
+
+                <h2>Push rejeitado: o erro mais comum de quem trabalha em grupo</h2>
+                <p>Se alguém enviou commits para a mesma branch depois do seu último pull, o GitHub recusa o seu push. Ele não deixa você sobrescrever o trabalho do colega.</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git push -u origin main
+                        $ colega commit -m "rodapé"
+                        + git commit -m "menu"
+                        > Você e um colega fizeram commits a partir de `A` ao mesmo tempo. O dele (`B`) já está no GitHub.
+                        $ git push
+                        > **Rejeitado.** Aceitar o seu push faria o GitHub perder o commit `B`.
+                        $ git pull
+                        > O `pull` baixou `B` e fez um merge com o seu `C`, criando `D`. Se as mesmas linhas tivessem sido alteradas, aqui apareceria um conflito para resolver.
+                        $ git push
+                        > Agora o seu histórico contém o do GitHub, e o push é aceito.
+                    </script>
+                    <figcaption>Solução: <code>git pull</code> e depois <code>git push</code>.</figcaption>
+                </figure>
+                <p>Algumas equipes preferem <code>git pull --rebase</code>, que reaplica o seu commit depois do commit do colega em vez de criar um merge:</p>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git push -u origin main
+                        = colega commit -m "rodapé"
+                        = git commit -m "menu"
+                        > A mesma situação: `B` no GitHub, `C` no seu computador.
+                        $ git pull --rebase
+                        > Seu commit foi recriado (`C'`) depois de `B`. O histórico fica em linha reta.
+                        $ git push
+                        > Push aceito.
+                    </script>
+                    <figcaption><code>git pull --rebase</code>: sem commit de merge. Seguro, porque o seu commit ainda não tinha sido enviado.</figcaption>
+                </figure>
+                <div class="callout danger">
+                    <p class="callout-title">Não use git push --force para “resolver”</p>
+                    <p>O <code>--force</code> obriga o GitHub a aceitar o seu histórico e <strong>apaga</strong> os commits dos colegas que você não tinha. Só use na sua própria branch, sabendo o que está fazendo. Mesmo assim, prefira <code>--force-with-lease</code>, que recusa se houver commits que você não viu.</p>
+                </div>
+
+                <h2>Upstream: a ligação entre branch local e remota</h2>
+                <p>O upstream diz para onde o <code>git push</code> e o <code>git pull</code> sem argumentos devem ir. Ele é configurado pelo <code>-u</code> no primeiro push, ou automaticamente quando você troca para uma branch que só existe no GitHub:</p>
+                <pre data-label="terminal"># cria a branch local ligada à origin/feature/menu
+git fetch
+git switch feature/menu
+
+# ver as ligações e se você está à frente/atrás
+git branch -vv
+<span class="o">* main          a1b2c3d [origin/main] adiciona estilo
+  feature/menu  9f8e7d6 [origin/feature/menu: ahead 2] menu responsivo</span></pre>
+
+                <h2>A rotina de quem trabalha em equipe</h2>
+                <ol class="steps">
+                    <li><strong>Atualize a main</strong>
+                        <pre data-label="terminal">git switch main
+git pull</pre>
+                    </li>
+                    <li><strong>Crie a branch da tarefa</strong>
+                        <pre data-label="terminal">git switch -c feature/minha-tarefa</pre>
+                    </li>
+                    <li><strong>Trabalhe com commits pequenos</strong>
+                        <pre data-label="terminal">git add .
+git commit -m "adiciona validação do formulário"</pre>
+                    </li>
+                    <li><strong>Envie e abra um pull request</strong>
+                        <pre data-label="terminal">git push -u origin feature/minha-tarefa</pre>
+                        <p>O próprio terminal mostra um link para criar o pull request no GitHub.</p>
+                    </li>
+                    <li><strong>Depois do merge, limpe</strong>
+                        <pre data-label="terminal">git switch main
+git pull
+git branch -d feature/minha-tarefa</pre>
+                    </li>
+                </ol>
+
+                <h2>HTTPS ou SSH?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th></th><th>HTTPS</th><th>SSH</th></tr></thead>
+                        <tbody>
+                            <tr><td>Endereço</td><td><code>https://github.com/usuario/projeto.git</code></td><td><code>git@github.com:usuario/projeto.git</code></td></tr>
+                            <tr><td>Login</td><td>Navegador (Credential Manager) ou token</td><td>Chave SSH cadastrada no GitHub</td></tr>
+                            <tr><td>Melhor para</td><td>Começar: funciona em qualquer rede</td><td>Uso diário: não pede login</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Para trocar o endereço de um repositório já clonado: <code>git remote set-url origin NOVO-ENDERECO</code>. Veja como configurar cada um em <a href="primeiros-passos.html#conectando-o-computador-ao-github">Instalação e configuração</a>.</p>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

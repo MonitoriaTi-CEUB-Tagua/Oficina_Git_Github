@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Colaborando no GitHub | Oficina Git & GitHub</title>
+    <meta name="description" content="Repositórios, colaboradores e forks, pull requests, revisão de código, issues, README em Markdown, GitHub Pages e GitHub Actions.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip practice">Prática</span> Capítulo 7</p>
+                    <h1>Colaborando no GitHub</h1>
+                    <p class="lead">O Git guarda o histórico; o GitHub organiza as pessoas em volta dele. Aqui está o que você precisa para trabalhar em equipe e mostrar seus projetos.</p>
+                </header>
+
+                <h2>Um tour pelo repositório</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Aba</th><th>Para que serve</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Code</strong></td><td>Os arquivos, o README, as branches e o botão verde <em>Code</em> com o endereço para clonar.</td></tr>
+                            <tr><td><strong>Issues</strong></td><td>Lista de tarefas, bugs e ideias. Cada issue tem número (<code>#12</code>), responsável e etiquetas.</td></tr>
+                            <tr><td><strong>Pull requests</strong></td><td>Propostas de mudança esperando revisão e merge.</td></tr>
+                            <tr><td><strong>Actions</strong></td><td>Automações: rodar testes, publicar o site, verificar o código a cada push.</td></tr>
+                            <tr><td><strong>Projects</strong></td><td>Quadro estilo Kanban com issues e pull requests.</td></tr>
+                            <tr><td><strong>Settings</strong></td><td>Colaboradores, proteção de branches, GitHub Pages, segredos. Só aparece para quem administra.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout tip">
+                    <p class="callout-title">Atalho escondido</p>
+                    <p>Em qualquer repositório, aperte a tecla <kbd>.</kbd> (ponto). Abre o <strong>github.dev</strong>, um VS Code no navegador, onde dá para editar e fazer commits sem instalar nada.</p>
+                </div>
+
+                <h2>Criando um repositório</h2>
+                <ol class="steps">
+                    <li><strong>Clique em New</strong> (botão <strong>+</strong> no topo → <em>New repository</em>).</li>
+                    <li><strong>Dê um nome</strong> curto, sem espaços: <code>loja-campus</code>, <code>trabalho-poo</code>.</li>
+                    <li><strong>Escolha a visibilidade.</strong> <em>Public</em>: qualquer pessoa vê (bom para portfólio). <em>Private</em>: só quem você convidar.</li>
+                    <li><strong>README, .gitignore e licença.</strong> Marque se vai começar pelo GitHub e clonar depois. Deixe tudo desmarcado se for enviar um projeto que já existe no seu computador (senão os históricos não batem).</li>
+                </ol>
+
+                <h2>Colaborador ou fork?</h2>
+                <p>Depende de você ter permissão para escrever no repositório:</p>
+                <div class="grid-2">
+                    <div class="panel accent" style="--c: var(--lane-2)">
+                        <h3>Colaborador</h3>
+                        <p>Para a equipe do trabalho. O dono do repositório convida em <em>Settings → Collaborators</em>. Todos clonam o <strong>mesmo</strong> repositório, criam branches nele e abrem pull requests para a <code>main</code>.</p>
+                    </div>
+                    <div class="panel accent" style="--c: var(--lane-4)">
+                        <h3>Fork</h3>
+                        <p>Para contribuir com projetos de outras pessoas, como open source. O botão <strong>Fork</strong> cria uma cópia do repositório na <strong>sua</strong> conta. Você trabalha na sua cópia e abre um pull request para o original.</p>
+                    </div>
+                </div>
+                <pre data-label="fluxo com fork"># 1. clique em Fork no GitHub e clone a SUA cópia
+git clone https://github.com/voce/projeto.git
+cd projeto
+
+# 2. aponte também para o repositório original, chamado de upstream
+git remote add upstream https://github.com/dono/projeto.git
+
+# 3. para atualizar sua cópia com o original
+git fetch upstream
+git switch main
+git merge upstream/main
+git push</pre>
+
+                <h2>Pull request: a proposta de mudança</h2>
+                <p>Um <strong>pull request</strong> (PR) é um pedido: “por favor, junte a minha branch na <code>main</code>”. Ele reúne a conversa, a revisão, os testes automáticos e o botão de merge num lugar só. Abrir um PR <strong>não</strong> junta nada: o merge só acontece quando alguém aprova e clica.</p>
+                <ol class="steps">
+                    <li><strong>Envie sua branch</strong>
+                        <pre data-label="terminal">git push -u origin feature/carrinho</pre>
+                    </li>
+                    <li><strong>Abra o PR</strong>
+                        <p>O GitHub mostra uma faixa amarela <em>Compare &amp; pull request</em>. Confira o destino: <strong>base</strong> é quem recebe (<code>main</code>), <strong>compare</strong> é a sua branch.</p>
+                    </li>
+                    <li><strong>Descreva</strong>
+                        <p>O que mudou, por que e como testar. Se ainda não estiver pronto, crie como <em>Draft</em>.</p>
+                    </li>
+                    <li><strong>Revisão</strong>
+                        <p>Peça revisão a um colega (<em>Reviewers</em>). Para responder aos comentários, faça novos commits na mesma branch e dê <code>git push</code>: o PR se atualiza sozinho.</p>
+                    </li>
+                    <li><strong>Merge</strong>
+                        <p>Aprovado, clique em <em>Merge pull request</em>. Depois apague a branch no próprio GitHub e atualize sua <code>main</code> local com <code>git pull</code>.</p>
+                    </li>
+                </ol>
+                <figure class="gitviz">
+                    <script type="text/plain">
+                        = git commit -m "início"
+                        = git push -u origin main
+                        $ git switch -c feature/carrinho
+                        + git commit -m "carrinho"
+                        + git commit -m "total"
+                        + git push -u origin feature/carrinho
+                        > A branch está no GitHub (☁). Você abre o pull request de `feature/carrinho` para `main`.
+                        $ git commit -m "revisão"
+                        + git push
+                        > Um colega pediu um ajuste. Você faz mais um commit e um push na mesma branch: o PR mostra o commit novo automaticamente.
+                        $ github merge feature/carrinho
+                        > Aprovado! O merge foi feito no site. O commit `E` existe só no GitHub até você baixar.
+                        $ git switch main
+                        + git pull
+                        > Sua `main` local agora tem tudo.
+                    </script>
+                    <figcaption>O ciclo de um pull request, do push ao pull.</figcaption>
+                </figure>
+                <pre data-label="modelo de descrição de PR (Markdown)" data-raw>## O que muda
+Adiciona o carrinho de compras com cálculo do total.
+
+## Como testar
+1. Rode o projeto e adicione dois produtos.
+2. Confira se o total soma os dois.
+
+## Issue relacionada
+Closes #12</pre>
+                <p>Escrever <code>Closes #12</code> liga o PR à issue 12 e fecha a issue automaticamente quando o PR entra na <code>main</code>.</p>
+
+                <h3>Como revisar o código de um colega</h3>
+                <ul>
+                    <li>Abra a aba <strong>Files changed</strong> e leia o diff. Clique no <strong>+</strong> ao lado de uma linha para comentar.</li>
+                    <li>Use <strong>Suggest changes</strong> para propor o código exato; o autor aceita com um clique.</li>
+                    <li>No fim, <em>Review changes</em>: <strong>Comment</strong> (só comentários), <strong>Approve</strong> (aprovado) ou <strong>Request changes</strong> (precisa ajustar).</li>
+                    <li>Comente o código, não a pessoa. “Esse loop pode ser trocado por um <code>map</code>?” funciona melhor que “isso está errado”.</li>
+                </ul>
+
+                <h2>Issues: organizando o trabalho</h2>
+                <p>Uma issue descreve uma tarefa ou um problema. Use para dividir o trabalho da equipe: cada pessoa pega uma issue, cria uma branch e abre um PR que a fecha.</p>
+                <pre data-label="modelo de issue de bug (Markdown)" data-raw>## O que acontece
+O menu fica cortado no celular.
+
+## Como reproduzir
+1. Abra a página inicial numa tela de 360 px.
+2. Toque no menu.
+
+## O esperado
+Todos os links aparecem na tela.
+
+## Ambiente
+Chrome 130, Android 14</pre>
+                <p>Use <strong>labels</strong> (bug, melhoria, documentação), <strong>assignees</strong> (quem cuida) e <strong>milestones</strong> (entrega). Mencione colegas com <code>@usuario</code> e outras issues com <code>#número</code>.</p>
+
+                <h2>README e Markdown</h2>
+                <p>O <code>README.md</code> é a capa do repositório: aparece logo abaixo dos arquivos. Ele é escrito em <strong>Markdown</strong>, um texto simples com marcações que o GitHub transforma em formatação. A mesma sintaxe vale em issues, PRs e comentários.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Você escreve</th><th>Resultado</th></tr></thead>
+                        <tbody>
+                            <tr><td><code># Título</code>, <code>## Subtítulo</code></td><td>Títulos de nível 1 e 2</td></tr>
+                            <tr><td><code>**negrito**</code> e <code>*itálico*</code></td><td><strong>negrito</strong> e <em>itálico</em></td></tr>
+                            <tr><td><code>- item</code></td><td>Lista com marcadores</td></tr>
+                            <tr><td><code>1. item</code></td><td>Lista numerada</td></tr>
+                            <tr><td><code>- [ ] tarefa</code></td><td>Caixa de seleção</td></tr>
+                            <tr><td><code>[texto](https://site.com)</code></td><td>Link</td></tr>
+                            <tr><td><code>![descrição](imagem.png)</code></td><td>Imagem</td></tr>
+                            <tr><td><code>`código`</code></td><td><code>código</code> na linha</td></tr>
+                            <tr><td>Três crases antes e depois</td><td>Bloco de código (ponha a linguagem depois das crases: <code>```python</code>)</td></tr>
+                            <tr><td><code>&gt; texto</code></td><td>Citação</td></tr>
+                            <tr><td><code>| a | b |</code> com <code>|---|---|</code></td><td>Tabela</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <pre data-label="README.md: um bom ponto de partida" data-raw># Loja do Campus
+
+Site de vendas da cantina, feito para a disciplina de Desenvolvimento Web.
+
+## Como rodar
+1. Clone o repositório
+2. Abra `index.html` no navegador
+
+## Tecnologias
+- HTML, CSS e JavaScript
+
+## Equipe
+- [Ana Souza](https://github.com/anasouza)
+- [João Lima](https://github.com/joaolima)</pre>
+                <div class="callout tip">
+                    <p class="callout-title">README do perfil</p>
+                    <p>Crie um repositório com o <strong>mesmo nome do seu usuário</strong> (ex.: <code>anasouza/anasouza</code>). O README dele aparece no topo do seu perfil: ótimo para se apresentar a recrutadores.</p>
+                </div>
+
+                <h2>GitHub Pages: publique um site de graça</h2>
+                <p>Sites estáticos (HTML, CSS e JavaScript) podem ser publicados direto do repositório. Este guia, por exemplo, é publicado assim.</p>
+                <ol class="steps">
+                    <li><strong>Deixe o <code>index.html</code> na raiz</strong> do repositório (ou numa pasta <code>/docs</code>).</li>
+                    <li><strong>Abra Settings → Pages.</strong></li>
+                    <li><strong>Em Source, escolha <em>Deploy from a branch</em></strong>, selecione <code>main</code> e a pasta <code>/ (root)</code>, e salve.</li>
+                    <li><strong>Espere um ou dois minutos.</strong> O endereço aparece no topo da página: <code>https://seu-usuario.github.io/nome-do-repo/</code>.</li>
+                </ol>
+                <p>A cada push na <code>main</code>, o site é atualizado. Em repositórios gratuitos, o Pages exige que o repositório seja público.</p>
+
+                <h2>GitHub Actions: automação a cada push</h2>
+                <p>Actions roda tarefas automaticamente em servidores do GitHub: testes, verificação de estilo, publicação. Você descreve o que fazer num arquivo YAML dentro de <code>.github/workflows/</code>:</p>
+                <pre data-label=".github/workflows/testes.yml" data-raw>name: Testes
+on: [push, pull_request]
+
+jobs:
+  testar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: pytest</pre>
+                <p>O resultado aparece em cada pull request como ✓ ou ✗. Se falhar, clique em <em>Details</em> para ler o log.</p>
+
+                <h2>Combinados para a equipe</h2>
+                <ul>
+                    <li>Ninguém faz commit direto na <code>main</code>: tudo entra por pull request. Dá para obrigar em <em>Settings → Rules</em> (ou <em>Branches</em>), exigindo revisão antes do merge.</li>
+                    <li>Uma tarefa por branch, PRs pequenos.</li>
+                    <li>Todo PR é revisado por pelo menos uma pessoa.</li>
+                    <li>Quem abre o PR resolve os conflitos dele.</li>
+                    <li>Um <code>CONTRIBUTING.md</code> explica como rodar o projeto e os combinados. Modelos de issue e de PR ficam na pasta <code>.github/</code>.</li>
+                    <li>Senhas, tokens e chaves nunca vão para o repositório, nem em repositório privado.</li>
+                </ul>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

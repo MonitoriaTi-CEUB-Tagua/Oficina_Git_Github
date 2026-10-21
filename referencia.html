@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Consulta rápida | Oficina Git & GitHub</title>
+    <meta name="description" content="Folha de consulta de comandos Git com busca, organizada por tarefa, e um glossário dos termos de Git e GitHub.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip help">Consulta</span> Capítulo 12</p>
+                    <h1>Consulta rápida</h1>
+                    <p class="lead">Os comandos da oficina organizados por tarefa. Busque pelo que você quer fazer (“desfazer”, “branch”) ou pelo comando.</p>
+                </header>
+
+                <div class="search" data-search="#ref-list">
+                    <label class="visually-hidden" for="ref-search">Buscar comando</label>
+                    <input id="ref-search" type="search" placeholder="Ex.: desfazer, enviar, renomear branch, stash…" autocomplete="off">
+                    <p class="search-count" aria-live="polite"></p>
+                </div>
+
+                <div id="ref-list">
+                    <section class="ref-group" data-section>
+                        <h2>Configurar</h2>
+                        <div class="table-wrap"><table class="ref-table"><tbody>
+                            <tr data-item><td><code>git config --global user.name "Nome"</code></td><td>Define seu nome nos commits</td></tr>
+                            <tr data-item><td><code>git config --global user.email "email"</code></td><td>Define seu e-mail nos commits</td></tr>
+                            <tr data-item><td><code>git config --global init.defaultBranch main</code></td><td>Projetos novos começam na branch main</td></tr>
+                            <tr data-item><td><code>git config --global core.editor "code --wait"</code></td><td>Usa o VS Code como editor do Git</td></tr>
+                            <tr data-item><td><code>git config --global --list</code></td><td>Mostra todas as configurações</td></tr>
+                            <tr data-item><td><code>git config --global alias.lg "log --oneline --graph --all"</code></td><td>Cria um atalho (alias) para um comando</td></tr>
+                        </tbody></table></div>
+                    </section>
+
+                    <section class="ref-group" data-section>
+                        <h2>Começar um projeto</h2>
+                        <div class="table-wrap"><table class="ref-table"><tbody>
+                            <tr data-item><td><code>git init</code></td><td>Transforma a pasta atual em repositório</td></tr>
+                            <tr data-item><td><code>git clone URL</code></td><td>Baixa um repositório existente (copiar, download)</td></tr>
+                            <tr data-item><td><code>git remote add origin URL</code></td><td>Conecta o repositório local a um remoto</td></tr>
+                            <tr data-item><td><code>git remote -v</code></td><td>Mostra os remotos configurados</td></tr>
+                            <tr data-item><td><code>git remote set-url origin URL</code></td><td>Troca o endereço do remoto</td></tr>
+                        </tbody></table></div>
+                    </section>
+
+                    <section class="ref-group" data-section>
+                        <h2>Salvar versões</h2>
+                        <div class="table-wrap"><table class="ref-table"><tbody>
+                            <tr data-item><td><code>git status</code></td><td>Mostra o que mudou e o que está preparado</td></tr>
+                            <tr data-item><td><code>git add arquivo</code></td><td>Prepara um arquivo para o commit (stage)</td></tr>
+                            <tr data-item><td><code>git add .</code></td><td>Prepara tudo o que mudou</td></tr>
+                            <tr data-item><td><code>git add -p</code></td><td>Escolhe trecho por trecho o que preparar</td></tr>
+                            <tr data-item><td><code>git commit -m "mensagem"</code></td><td>Registra um commit (salvar versão)</td></tr>
+                            <tr data-item><td><code>git commit -am "mensagem"</code></td><td>Adiciona arquivos rastreados e faz commit</td></tr>
+                        </tbody></table></div>
+                    </section>
+
+                    <section class="ref-group" data-section>
+                        <h2>Ver histórico e diferenças</h2>
+                        <div class="table-wrap"><table class="ref-table"><tbody>
+                            <tr data-item><td><code>git log --oneline</code></td><td>Histórico resumido</td></tr>
+                            <tr data-item><td><code>git log --oneline --graph --all</code></td><td>Histórico em forma de grafo, todas as branches</td></tr>
+                            <tr data-item><td><code>git show HASH</code></td><td>Detalhes e diff de um commit</td></tr>
+                            <tr data-item><td><code>git diff</code></td><td>Mudanças ainda não preparadas</td></tr>
+                            <tr data-item><td><code>git diff --staged</code></td><td>Mudanças preparadas para o commit</td></tr>
+                            <tr data-item><td><code>git diff main..feature</code></td><td>Diferença entre duas branches (comparar)</td></tr>
+                            <tr data-item><td><code>git blame arquivo</code></td><td>Quem alterou cada linha e quando</td></tr>
+                        </tbody></table></div>
+                    </section>
+
+                    <section class="ref-group" data-section>
+                        <h2>Branches</h2>
+                        <div class="table-wrap"><table class="ref-table"><tbody>
+                            <tr data-item><td><code>git branch</code></td><td>Lista branches locais (listar)</td></tr>
+                            <tr data-item><td><code>git branch -a</code></td><td>Lista também as do remoto</td></tr>
+                            <tr data-item><td><code>git switch -c nome</code></td><td>Cria uma branch e entra nela (criar)</td></tr>
+                            <tr data-item><td><code>git switch nome</code></td><td>Troca de branch (mudar, trocar)</td></tr>
+                            <tr data-item><td><code>git switch -</code></td><td>Volta para a branch anterior</td></tr>
+                            <tr data-item><td><code>git branch -m novo-nome</code></td><td>Renomeia a branch atual (renomear)</td></tr>
+                            <tr data-item><td><code>git branch -d nome</code></td><td>Apaga branch já integrada (deletar, apagar)</td></tr>
+                            <tr data-item><td><code>git push origin --delete nome</code></td><td>Apaga a branch no GitHub</td></tr>
+                        </tbody></table></div>
+                    </section>
+
+                    <section class="ref-group" data-section>
+                        <h2>Juntar trabalhos</h2>
+                        <div class="table-wrap"><table class="ref-table"><tbody>
+                            <tr data-item><td><code>git merge nome</code></td><td>Traz a branch nome para a branch atual (juntar, integrar)</td></tr>
+                            <tr data-item><td><code>git merge --no-ff nome</code></td><td>Merge sempre com commit de merge</td></tr>
+                            <tr data-item><td><code>git merge --abort</code></td><td>Cancela um merge com conflito</td></tr>
+                            <tr data-item><td><code>git rebase main</code></td><td>Reaplica seus commits depois da main</td></tr>
+                            <tr data-item><td><code>git rebase --continue</code></td><td>Segue o rebase após resolver conflito</td></tr>
+                            <tr data-item><td><code>git rebase --abort</code></td><td>Cancela o rebase</td></tr>
+                            <tr data-item><td><code>git cherry-pick HASH</code></td><td>Copia um commit específico para cá</td></tr>
+                        </tbody></table></div>
+                    </section>
+
+                    <section class="ref-group" data-section>
+                        <h2>Trabalhar com o remoto</h2>
+                        <div class="table-wrap"><table class="ref-table"><tbody>
+                            <tr data-item><td><code>git push -u origin nome</code></td><td>Primeiro envio de uma branch (enviar, publicar, upload)</td></tr>
+                            <tr data-item><td><code>git push</code></td><td>Envia commits (enviar, subir)</td></tr>
+                            <tr data-item><td><code>git fetch</code></td><td>Baixa novidades sem mexer na sua branch</td></tr>
+                            <tr data-item><td><code>git pull</code></td><td>Baixa e junta na branch atual (atualizar, receber)</td></tr>
+                            <tr data-item><td><code>git pull --rebase</code></td><td>Atualiza reaplicando seus commits por cima</td></tr>
+                            <tr data-item><td><code>git branch -vv</code></td><td>Mostra a ligação com o remoto e se está à frente/atrás</td></tr>
+                            <tr data-item><td><code>git push --force-with-lease</code></td><td>Força o envio com segurança (só na sua branch)</td></tr>
+                        </tbody></table></div>
+                    </section>
+
+                    <section class="ref-group" data-section>
+                        <h2>Desfazer</h2>
+                        <div class="table-wrap"><table class="ref-table"><tbody>
+                            <tr data-item><td><code>git restore arquivo</code></td><td>Descarta mudanças no arquivo (voltar, desfazer)</td></tr>
+                            <tr data-item><td><code>git restore --staged arquivo</code></td><td>Tira o arquivo do stage</td></tr>
+                            <tr data-item><td><code>git commit --amend</code></td><td>Corrige o último commit (antes do push)</td></tr>
+                            <tr data-item><td><code>git reset --soft HEAD~1</code></td><td>Desfaz o último commit, mantém as mudanças</td></tr>
+                            <tr data-item><td><code>git reset --hard HEAD~1</code></td><td>Desfaz o último commit e descarta as mudanças</td></tr>
+                            <tr data-item><td><code>git revert HASH</code></td><td>Cria commit que desfaz outro (seguro após push)</td></tr>
+                            <tr data-item><td><code>git reflog</code></td><td>Histórico de onde o HEAD esteve (recuperar commits perdidos)</td></tr>
+                            <tr data-item><td><code>git clean -fd</code></td><td>Apaga arquivos não rastreados (cuidado)</td></tr>
+                        </tbody></table></div>
+                    </section>
+
+                    <section class="ref-group" data-section>
+                        <h2>Guardar temporariamente</h2>
+                        <div class="table-wrap"><table class="ref-table"><tbody>
+                            <tr data-item><td><code>git stash</code></td><td>Guarda as mudanças e limpa a pasta (gaveta)</td></tr>
+                            <tr data-item><td><code>git stash -u</code></td><td>Guarda também arquivos novos</td></tr>
+                            <tr data-item><td><code>git stash list</code></td><td>Lista o que está guardado</td></tr>
+                            <tr data-item><td><code>git stash pop</code></td><td>Devolve as últimas mudanças guardadas</td></tr>
+                        </tbody></table></div>
+                    </section>
+
+                    <section class="ref-group" data-section>
+                        <h2>Tags e versões</h2>
+                        <div class="table-wrap"><table class="ref-table"><tbody>
+                            <tr data-item><td><code>git tag v1.0</code></td><td>Marca o commit atual como versão</td></tr>
+                            <tr data-item><td><code>git tag -a v1.0 -m "primeira versão"</code></td><td>Tag com descrição</td></tr>
+                            <tr data-item><td><code>git push --tags</code></td><td>Envia as tags para o GitHub</td></tr>
+                        </tbody></table></div>
+                    </section>
+                </div>
+
+                <h2>Glossário</h2>
+                <dl class="term-list">
+                    <dt>Repositório (repo)</dt><dd>Pasta com histórico Git. O histórico fica na subpasta oculta <code>.git</code>.</dd>
+                    <dt>Commit</dt><dd>Uma versão salva do projeto, com autor, data, mensagem e ponteiro para o commit anterior.</dd>
+                    <dt>Hash</dt><dd>Identificador único de um commit, como <code>3f9a2c1</code>.</dd>
+                    <dt>Staging / index</dt><dd>Área onde você prepara o que vai entrar no próximo commit.</dd>
+                    <dt>Branch</dt><dd>Etiqueta móvel que aponta para um commit e representa uma linha de trabalho.</dd>
+                    <dt>HEAD</dt><dd>Indica em qual branch (ou commit) você está agora.</dd>
+                    <dt>main / master</dt><dd>Nome usual da branch principal. <code>master</code> é o nome antigo.</dd>
+                    <dt>Merge</dt><dd>Juntar o histórico de uma branch em outra.</dd>
+                    <dt>Fast-forward</dt><dd>Merge em que a branch só avança, sem commit de merge.</dd>
+                    <dt>Rebase</dt><dd>Reaplicar commits sobre outra base, criando cópias novas.</dd>
+                    <dt>Conflito</dt><dd>Quando duas mudanças nas mesmas linhas precisam de decisão humana.</dd>
+                    <dt>Remoto (origin)</dt><dd>Outra cópia do repositório, normalmente no GitHub. <code>origin</code> é o nome padrão.</dd>
+                    <dt>origin/main</dt><dd>Última posição conhecida da branch <code>main</code> no remoto.</dd>
+                    <dt>Upstream</dt><dd>A branch remota ligada à sua branch local. Também é o nome comum do repositório original num fork.</dd>
+                    <dt>Clone</dt><dd>Cópia completa de um repositório remoto para o seu computador.</dd>
+                    <dt>Fork</dt><dd>Cópia de um repositório para a sua conta no GitHub.</dd>
+                    <dt>Push / Pull / Fetch</dt><dd>Enviar commits / baixar e juntar / só baixar.</dd>
+                    <dt>Pull request (PR)</dt><dd>Pedido para juntar uma branch em outra, com revisão. No GitLab: merge request.</dd>
+                    <dt>Issue</dt><dd>Tarefa, bug ou ideia registrada no GitHub.</dd>
+                    <dt>Tag</dt><dd>Etiqueta fixa para marcar uma versão (<code>v1.0</code>). Diferente da branch, não se move.</dd>
+                    <dt>Stash</dt><dd>Gaveta temporária para mudanças sem commit.</dd>
+                    <dt>Detached HEAD</dt><dd>Quando o HEAD aponta direto para um commit, sem branch.</dd>
+                    <dt>.gitignore</dt><dd>Arquivo com a lista do que o Git deve ignorar.</dd>
+                </dl>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>

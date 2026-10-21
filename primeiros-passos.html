@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instalação e configuração | Oficina Git & GitHub</title>
+    <meta name="description" content="Instale o Git no Windows, macOS ou Linux, configure nome e e-mail, conecte o computador ao GitHub e aprenda o básico do terminal.">
+    <meta name="theme-color" content="#3d144c">
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }</script>
+    <script src="assets/js/git-sim.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip">Pular para o conteúdo</a>
+    <header class="topbar">
+        <button type="button" class="top-btn icon menu-toggle" aria-expanded="false" aria-controls="navegacao" aria-label="Capítulos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <a href="index.html" class="brand"><img src="assets/img/ceub.png" alt="CEUB" width="40" height="40"><span>Oficina Git &amp; GitHub<small>Monitoria de TI do CEUB</small></span></a>
+        <a class="top-btn" href="laboratorio.html" aria-label="Laboratório"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><span class="label">Laboratório</span></a>
+        <a class="top-btn" href="problemas.html" aria-label="Deu erro?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg><span class="label">Deu erro?</span></a>
+        <button type="button" class="top-btn monitors-toggle" aria-label="Monitores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span class="label">Monitores</span></button>
+        <button type="button" class="top-btn icon theme-toggle" aria-label="Alternar tema"></button>
+    </header>
+    <div class="layout">
+        <aside class="sidebar" id="navegacao"></aside>
+        <main class="main" id="conteudo">
+            <article class="content">
+<header class="page-head">
+                    <p class="page-kicker"><span class="chip practice">Prática</span> Capítulo 2</p>
+                    <h1>Instalação e configuração</h1>
+                    <p class="lead">Deixe o computador pronto uma vez e esqueça. São uns 15 minutos.</p>
+                </header>
+
+                <h2>O que instalar</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Ferramenta</th><th>Para quê</th><th>Precisa?</th></tr></thead>
+                        <tbody>
+                            <tr><td><a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer"><strong>Git</strong></a></td><td>O programa de versionamento em si.</td><td class="yes">Sim</td></tr>
+                            <tr><td><a href="https://github.com/signup" target="_blank" rel="noopener noreferrer"><strong>Conta no GitHub</strong></a></td><td>Guardar repositórios online e colaborar.</td><td class="yes">Sim</td></tr>
+                            <tr><td><a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer"><strong>VS Code</strong></a></td><td>Editor de código com Git integrado.</td><td>Recomendado</td></tr>
+                            <tr><td><a href="https://desktop.github.com/" target="_blank" rel="noopener noreferrer"><strong>GitHub Desktop</strong></a></td><td>Interface visual para quem prefere clicar.</td><td class="no">Opcional</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Instalando o Git</h2>
+                <div class="tabs" data-group="os">
+                    <div class="tab-panel" data-tab="Windows">
+                        <p>Baixe o instalador em <a href="https://git-scm.com/downloads/win" target="_blank" rel="noopener noreferrer">git-scm.com/downloads/win</a> ou instale pelo terminal (PowerShell):</p>
+                        <pre data-label="PowerShell">winget install --id Git.Git -e --source winget</pre>
+                        <p>O instalador faz muitas perguntas. Pode deixar o padrão em quase todas, com três ajustes:</p>
+                        <ol>
+                            <li><strong>Choosing the default editor</strong>: escolha <em>Visual Studio Code</em> (se não escolher, o padrão é o Vim, que confunde quem nunca usou).</li>
+                            <li><strong>Adjusting the name of the initial branch</strong>: marque <em>Override</em> e deixe <code>main</code>.</li>
+                            <li><strong>Adjusting your PATH</strong>: deixe <em>Git from the command line and also from 3rd-party software</em>.</li>
+                        </ol>
+                        <p>O instalador traz o <strong>Git Bash</strong>, um terminal que aceita os mesmos comandos do macOS e do Linux. Os exemplos deste guia funcionam nele.</p>
+                    </div>
+                    <div class="tab-panel" data-tab="macOS">
+                        <p>Abra o Terminal e digite:</p>
+                        <pre data-label="Terminal">git --version</pre>
+                        <p>Se o Git não estiver instalado, o macOS oferece instalar as <em>Command Line Tools</em>. Aceite e espere terminar. Se usa <a href="https://brew.sh/" target="_blank" rel="noopener noreferrer">Homebrew</a>, a alternativa é:</p>
+                        <pre data-label="Terminal">brew install git</pre>
+                    </div>
+                    <div class="tab-panel" data-tab="Linux">
+                        <p>Use o gerenciador de pacotes da sua distribuição:</p>
+                        <pre data-label="Terminal"># Ubuntu, Debian, Mint
+sudo apt update && sudo apt install git
+
+# Fedora
+sudo dnf install git
+
+# Arch
+sudo pacman -S git</pre>
+                    </div>
+                </div>
+                <p>Depois, <strong>feche e abra o terminal de novo</strong> e confira:</p>
+                <pre data-label="terminal">git --version
+<span class="o">git version 2.51.0</span></pre>
+                <p>Qualquer versão a partir da 2.28 serve. Se aparecer “comando não encontrado”, veja <a href="problemas.html#git-nao-reconhecido">o que fazer</a>.</p>
+
+                <h2>O básico do terminal</h2>
+                <p>Você não precisa ser especialista. Com estes comandos dá para fazer tudo na oficina:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Para</th><th>Git Bash, macOS, Linux</th><th>PowerShell</th></tr></thead>
+                        <tbody>
+                            <tr><td>Ver em que pasta estou</td><td><code>pwd</code></td><td><code>pwd</code></td></tr>
+                            <tr><td>Listar arquivos</td><td><code>ls</code> (ocultos: <code>ls -a</code>)</td><td><code>ls</code> (ocultos: <code>ls -Force</code>)</td></tr>
+                            <tr><td>Entrar numa pasta</td><td><code>cd nome-da-pasta</code></td><td><code>cd nome-da-pasta</code></td></tr>
+                            <tr><td>Voltar uma pasta</td><td><code>cd ..</code></td><td><code>cd ..</code></td></tr>
+                            <tr><td>Criar pasta</td><td><code>mkdir projeto</code></td><td><code>mkdir projeto</code></td></tr>
+                            <tr><td>Abrir a pasta no VS Code</td><td><code>code .</code></td><td><code>code .</code></td></tr>
+                            <tr><td>Limpar a tela</td><td><code>clear</code></td><td><code>cls</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout tip">
+                    <p class="callout-title">Atalhos que poupam tempo</p>
+                    <p><kbd>Tab</kbd> completa nomes de pastas e comandos. <kbd>↑</kbd> repete o comando anterior. No VS Code, <kbd>Ctrl</kbd>+<kbd>'</kbd> abre um terminal já na pasta do projeto.</p>
+                </div>
+
+                <h2>Configuração inicial</h2>
+                <p>Faça uma vez em cada computador. O <code>--global</code> vale para todos os repositórios do seu usuário.</p>
+                <pre data-label="terminal"># quem é você (aparece em cada commit)
+git config --global user.name "Seu Nome"
+git config --global user.email "seu-email@exemplo.com"
+
+# a branch principal de projetos novos se chama main
+git config --global init.defaultBranch main
+
+# usar o VS Code para escrever mensagens (em vez do Vim)
+git config --global core.editor "code --wait"
+
+# git pull junta as versões com merge (evita um aviso comum)
+git config --global pull.rebase false
+
+# conferir tudo
+git config --global --list</pre>
+                <div class="tabs" data-group="os">
+                    <div class="tab-panel" data-tab="Windows">
+                        <p>No Windows, inclua também esta linha. Ela converte as quebras de linha automaticamente e evita diferenças falsas quando colegas usam macOS ou Linux:</p>
+                        <pre data-label="terminal">git config --global core.autocrlf true</pre>
+                    </div>
+                    <div class="tab-panel" data-tab="macOS">
+                        <pre data-label="terminal">git config --global core.autocrlf input</pre>
+                    </div>
+                    <div class="tab-panel" data-tab="Linux">
+                        <pre data-label="terminal">git config --global core.autocrlf input</pre>
+                    </div>
+                </div>
+                <div class="callout warn">
+                    <p class="callout-title">Nome e e-mail não são login</p>
+                    <p>Essa configuração só carimba seus commits. Ela não conecta você ao GitHub. Use o mesmo e-mail da sua conta do GitHub para que os commits apareçam no seu perfil. Se não quiser expor o e-mail, use o endereço <code>…@users.noreply.github.com</code> que aparece em <em>GitHub → Settings → Emails</em>.</p>
+                </div>
+
+                <h2>Criando a conta no GitHub</h2>
+                <ul>
+                    <li>Escolha um nome de usuário que você usaria num currículo: ele vira o endereço do seu perfil (<code>github.com/seu-usuario</code>).</li>
+                    <li>Ative a <strong>autenticação em dois fatores</strong> (2FA) em <em>Settings → Password and authentication</em>. O GitHub exige isso de quem contribui com código.</li>
+                    <li>Sendo estudante, peça o <a href="https://education.github.com/pack" target="_blank" rel="noopener noreferrer">GitHub Student Developer Pack</a> com seu e-mail institucional. Ele libera o GitHub Copilot, o GitHub Pro e ferramentas de parceiros sem custo.</li>
+                </ul>
+
+                <h2>Conectando o computador ao GitHub</h2>
+                <p>Para <strong>baixar</strong> um repositório público, não precisa de login. Para <strong>enviar</strong> (<code>push</code>), o GitHub precisa saber quem é você. Escolha um caminho:</p>
+                <div class="tabs">
+                    <div class="tab-panel" data-tab="Login pelo navegador (mais fácil)">
+                        <p>No Windows, o Git já vem com o <strong>Git Credential Manager</strong>. No primeiro <code>git push</code>, abre uma janela do navegador: faça login no GitHub e autorize. Pronto, fica salvo.</p>
+                        <p>No macOS e no Linux, o caminho mais simples é o <a href="https://cli.github.com/" target="_blank" rel="noopener noreferrer">GitHub CLI</a>:</p>
+                        <pre data-label="terminal">gh auth login
+# responda: GitHub.com → HTTPS → Yes (autenticar o Git) → Login with a web browser</pre>
+                    </div>
+                    <div class="tab-panel" data-tab="Chave SSH">
+                        <p>Mais técnico, mas não expira e funciona em qualquer sistema.</p>
+                        <pre data-label="terminal"># 1. criar a chave (aperte Enter para aceitar o local padrão)
+ssh-keygen -t ed25519 -C "seu-email@exemplo.com"
+
+# 2. mostrar a chave PÚBLICA para copiar
+cat ~/.ssh/id_ed25519.pub
+
+# 3. cole em GitHub → Settings → SSH and GPG keys → New SSH key
+
+# 4. testar
+ssh -T git@github.com
+<span class="o">Hi seu-usuario! You've successfully authenticated...</span></pre>
+                        <p>Com SSH, use os endereços que começam com <code>git@github.com:</code> em vez de <code>https://</code>.</p>
+                    </div>
+                </div>
+                <div class="callout danger">
+                    <p class="callout-title">A senha da conta não funciona no terminal</p>
+                    <p>O GitHub não aceita a senha da conta em comandos Git. Se o terminal pedir “Password”, use o login pelo navegador acima ou um <em>personal access token</em>. E nunca coloque tokens ou senhas em arquivos do projeto.</p>
+                </div>
+
+                <h2>Teste final</h2>
+                <p>Se estes comandos funcionarem, você está pronto para a oficina:</p>
+                <pre data-label="terminal">mkdir teste-git
+cd teste-git
+git init
+<span class="o">Initialized empty Git repository in .../teste-git/.git/</span>
+git status
+<span class="o">On branch main
+No commits yet
+nothing to commit (create/copy files and use "git add" to track)</span></pre>
+                <p>Viu <code>On branch main</code>? Tudo certo. Pode apagar a pasta <code>teste-git</code> depois.</p>
+
+                <nav class="page-nav" aria-label="Capítulo anterior e próximo"></nav>
+                <footer class="footer"></footer>
+            </article>
+            <nav class="toc" aria-label="Nesta página"></nav>
+        </main>
+    </div>
+</body>
+
+</html>
